@@ -1,4 +1,4 @@
-Hub.Handler.Version = 4;
+Hub.Handler.Version = 6;
 Hub.Handler.Id = "apv0UYDgGi7MKk1BF";
 Hub.Maintainer.Name = "framilano";
 Hub.Maintainer.Id = "0xMRJDltsx0zljSu6";
@@ -6,14 +6,25 @@ Hub.Maintainer.Id = "0xMRJDltsx0zljSu6";
 //Ask user for Bloodborne game files folder path
 Game.AddOption("Bloodborne Folder Path", "Enter Bloodborne folder path (the CUSAXXXXX folder containing eboot.bin)", "bloodborneFolderPath", []);
 
+//Ask for the render resolution used by all instances
 var resolutionOptions = ["Default 1080p (16:9)", "Optimal 1080p (16:9)", "640x360 (16:9)", "960x540 (16:9)", "1280x720 (16:9)", "1440x810 (16:9)", "1600x900 (16:9)"];
 Game.AddOption("Render Resolution", "Enter your desired render resolution for all instances", "resolutionOption", resolutionOptions);
 
-var seamlessOptions = ["Yes", "No"];
-Game.AddOption("Experimental Seamless Support", "Shall we enable Wozzardman experimental Seamless support?", "seamlessOption", seamlessOptions);
+//Ask for which servers combo to use
+var serversOptions = ["Local/Wozzardman (Offline)", "HuntersDream/Wozzardman (Online)", "NoDreamForTheHunter (Online)"];
+Game.AddOption("Stats and Co-op Servers Combo", "Which servers setup shall we use? (NoDreamForTheHunter requires their shadps4.exe executable to be selected first)", "serversOption", serversOptions);
 
-var statsServerOptions = ["Local (Offline)", "The Hunter's Dream (Online)"];
-Game.AddOption("Stats and Messengers Server", "Which server for messengers, ghosts and stats shall we use?", "statsServerOption", statsServerOptions);
+//Ask if we should enabled the Wozzardman seamless support
+var seamlessOptions = ["Yes", "No"];
+Game.AddOption("Experimental Seamless Support", "Shall we enable Wozzardman experimental Seamless support? (Only makes sense if you selected a server option that includes Wozzardman", "seamlessOption", seamlessOptions);
+
+//Ask for credentials for each instance
+Game.AddOption("Player 0 Custom Server Username", "Enter your Player0 username for the online custom server (Only makes sense if you selected a server option for a third party server like NoDreamForTheHunter)", "customServerPlayer0HunterUsername", []);
+Game.AddOption("Player 0 Custom Server Password", "Enter your Player0 password for the online custom server", "customServerPlayer0HunterPassword", []);
+Game.AddOption("Player 1 Custom Server Username", "Enter your Player1 username for the online custom server", "customServerPlayer1HunterUsername", []);
+Game.AddOption("Player 1 Custom Server Password", "Enter your Player1 password for the online custom server", "customServerPlayer1HunterPassword", []);
+Game.AddOption("Player 2 Custom Server Username", "Enter your Player2 username for the online custom server", "customServerPlayer2HunterUsername", []);
+Game.AddOption("Player 2 Custom Server Password", "Enter your Player2 password for the online custom server", "customServerPlayer2HunterPassword", []);
 
 Game.ExecutableContext = [];
 Game.DirExclusions = [];
@@ -162,7 +173,7 @@ function setupPatches(handlerBloodbornePatchesFilePath, resolutionOption) {
   Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ patchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
   
   //Setting resolution patch using user option
-  if (resolutionOption == "Default 1080p (16:9)") {
+  if (resolutionOption == resolutionOptions[0]) {
     Handler.Log("[STOP setupPatches] No resolution patch selected then!");
     return;
   }
@@ -174,8 +185,8 @@ function setupPatches(handlerBloodbornePatchesFilePath, resolutionOption) {
 /**
  * Setting up shadnet server and register clients manually
  */
-function setupShadnetServer(seamlessOption, statsServerOption) {
-  Handler.Log("[INFO setupShadnetServer]");
+function setupShadnetServer(seamlessOption, serversOption) {
+  Handler.Log("[START setupShadnetServer]");
 
   //Server setup only during first instance launch  
   if (Context.PlayerID == 0) {
@@ -186,7 +197,7 @@ function setupShadnetServer(seamlessOption, statsServerOption) {
     else var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=false', ]; 
     Context.ReplaceLinesInTextFile(handlerShadnetConfigFilePath, dict);
     //Start stats server only if requested by the user
-    if (statsServerOption == "Local (Offline)") {
+    if (serversOption == serversOptions[0]) {
       var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet\\fhody125-web-fork\\NoDreamForHunter.exe");
       Context.StartProcess(handlerStatsExecutableFilePath, "", false);
     }
@@ -202,63 +213,94 @@ function setupShadnetServer(seamlessOption, statsServerOption) {
   Handler.Log("[STOP setupShadnetServer]");
 }
 
+function setupHostOverrides(serversOption, instanceUserFolderPath) {
+ var handlerHostOverridesFilePath = System.IO.Path.Combine(Game.Folder, "configs\\host_overrides.json");
+  var statsServerLineNumber = Context.FindLineNumberInTextFile(handlerHostOverridesFilePath, 'https://ss4.scej-network.jp:20443', Nucleus.SearchType.Contains); 
+  if (serversOption == serversOptions[0]) var dict = [ statsServerLineNumber + '|  "https://ss4.scej-network.jp:20443": "http://127.0.0.1",', ]; 
+  else var dict = [ statsServerLineNumber + '|  "https://ss4.scej-network.jp:20443": "http://thehuntersdream.com",', ];
+  Context.ReplaceLinesInTextFile(handlerHostOverridesFilePath, dict);
+  var instanceHostOverridesFilePath = System.IO.Path.Combine(instanceUserFolderPath, "host_overrides.json");
+  System.IO.File.Copy(handlerHostOverridesFilePath, instanceHostOverridesFilePath, true);
+}
+
+function setupUserConfig(instanceUserFolderPath, serversOption) {
+  Handler.Log("[START setupUserConfig]");
+  
+  var handlerUsersFilePath = System.IO.Path.Combine(Game.Folder, "configs\\users.json");
+  var instanceUsersFilePath = System.IO.Path.Combine(instanceUserFolderPath, "users.json");
+  System.IO.File.Copy(handlerUsersFilePath, instanceUsersFilePath, true);
+  var hunterUsernameLineNumber = Context.FindLineNumberInTextFile(instanceUsersFilePath, '        "shadnet_npid"', Nucleus.SearchType.Contains); 
+  var hunterPasswordLineNumber = Context.FindLineNumberInTextFile(instanceUsersFilePath, '        "shadnet_password"', Nucleus.SearchType.Contains); 
+
+  //Username and password are different if using a custom server or the local one
+  var hunterUsername = serversOption == serversOptions[2] ?  Context.Options["customServerPlayer" + Context.PlayerID + "HunterUsername"] : "Hunter" + Context.PlayerID;
+  var hunterPassword = serversOption == serversOptions[2] ? Context.Options["customServerPlayer" + Context.PlayerID + "HunterPassword"] : "12345";
+  Handler.Log("Logging in with username " + hunterUsername + " and password " + hunterPassword);
+
+  //Handler.Log(Context.PlayerID)
+  var dict = [ 
+    hunterUsernameLineNumber + '|        "shadnet_npid": "' + hunterUsername + '",',
+    hunterPasswordLineNumber + '|        "shadnet_password": "' + hunterPassword + '",',
+  ]; 
+  Context.ReplaceLinesInTextFile(instanceUsersFilePath, dict);
+  Handler.Log("[STOP setupUserConfig]");
+}
+
+function setupBloodborneCustomConfig(instanceUserFolderPath, titleId) {
+  Handler.Log("[START setupBloodborneCustomConfig]");
+  
+  var handlerCustomConfigFilePath = System.IO.Path.Combine(Game.Folder, "configs\\CUSTOM_CONFIG.json");
+  var instanceCustomConfigFolderPath = System.IO.Path.Combine(instanceUserFolderPath, "custom_configs");
+  System.IO.Directory.CreateDirectory(instanceCustomConfigFolderPath);
+  var instanceCustomConfigFilePath = System.IO.Path.Combine(instanceCustomConfigFolderPath, titleId + ".json");
+  System.IO.File.Copy(handlerCustomConfigFilePath, instanceCustomConfigFilePath, true);
+
+  Handler.Log("[START setupBloodborneCustomConfig]");
+
+}
+
+function setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath) {
+  var handlerBloodbornePatchesFilePath = System.IO.Path.Combine(Game.Folder, "patches\\BloodborneHandler.xml");
+  if (Context.PlayerID == 0) { setupPatches(handlerBloodbornePatchesFilePath, resolutionOption); }   //Replace Bloodborne.xml and edit it only with the first instance, we don't need to do this more than once
+  var ebootBinFilePath =  System.IO.Path.Combine(bloodborneFolderPath, "eboot.bin");
+  if (seamlessOption == seamlessOptions[0])   System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "1");
+  else System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "0");
+  Context.StartArguments = "--patch \"" + handlerBloodbornePatchesFilePath + "\" --game \"" + ebootBinFilePath + "\"";
+}
+
 Game.Play = function() {
 
   //User answers
   var bloodborneFolderPath = Context.Options["bloodborneFolderPath"];
   var resolutionOption = Context.Options["resolutionOption"];
-  var statsServerOption = Context.Options["statsServerOption"];
+  var serversOption = Context.Options["serversOption"];
   var seamlessOption = Context.Options["seamlessOption"];
+
+  Handler.Log(serversOption)
 
   //Game region answer from the user
   var titleId = bloodborneFolderPath.split(/[/\\]/).pop().replace("\"", "");
   Handler.Log(titleId);
 
   //Load patches from Bloodborne.xml in handler folder and configure env variables
-  var handlerBloodbornePatchesFilePath = System.IO.Path.Combine(Game.Folder, "patches\\BloodborneHandler.xml");
-  if (Context.PlayerID == 0) { setupPatches(handlerBloodbornePatchesFilePath, resolutionOption); }   //Replace Bloodborne.xml and edit it only with the first instance, we don't need to do this more than once
-  var ebootBinFilePath =  System.IO.Path.Combine(bloodborneFolderPath, "eboot.bin");
-  if (seamlessOption == "Yes")   System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "1");
-  else System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "0");
-  Context.StartArguments = "--patch \"" + handlerBloodbornePatchesFilePath + "\" --game \"" + ebootBinFilePath + "\"";
+  setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath);
 
-  //Setting up server and registering clients
-  setupShadnetServer(seamlessOption, statsServerOption);
-  
   //Creating instance user folder
   var instanceUserFolderPath =  System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
   System.IO.Directory.CreateDirectory(instanceUserFolderPath);
   
-  //Copy config.json to each instance
-  var handlerConfigFilePath = System.IO.Path.Combine(Game.Folder, "configs\\config.json");
-  var instanceConfigFilePath = System.IO.Path.Combine(instanceUserFolderPath, "config.json");
-  System.IO.File.Copy(handlerConfigFilePath, instanceConfigFilePath, true);
+  //Set up server, register clients and copy the host_overrides.json only if using wozzardman and local stats server
+  if (serversOption != serversOptions[2]) {
+    //Run the servers and register the clients
+    setupShadnetServer(seamlessOption, serversOption);
+    
+    //Copy host_overrides.json for each instance
+    setupHostOverrides(serversOption, instanceUserFolderPath)
+  }
 
   //Copy users.json to each instance with the correct login credentials
-  var handlerUsersFilePath = System.IO.Path.Combine(Game.Folder, "configs\\users.json");
-  var instanceUsersFilePath = System.IO.Path.Combine(instanceUserFolderPath, "users.json");
-  System.IO.File.Copy(handlerUsersFilePath, instanceUsersFilePath, true);
-  var hunterUsernameLineNumber = Context.FindLineNumberInTextFile(instanceUsersFilePath, '        "shadnet_npid"', Nucleus.SearchType.Contains); 
-  var hunterUsername = "Hunter" + Context.PlayerID;
-  //Handler.Log(Context.PlayerID)
-  var dict = [ 
-    hunterUsernameLineNumber + '|        "shadnet_npid": "' + hunterUsername + '",',
-  ]; 
-  Context.ReplaceLinesInTextFile(instanceUsersFilePath, dict);
-
-  //Copy host_overrides.json for each instance
-  var handlerHostOverridesFilePath = System.IO.Path.Combine(Game.Folder, "configs\\host_overrides.json");
-  var statsServerLineNumber = Context.FindLineNumberInTextFile(handlerHostOverridesFilePath, 'https://ss4.scej-network.jp:20443', Nucleus.SearchType.Contains); 
-  if (statsServerOption == "Local (Offline)") var dict = [ statsServerLineNumber + '|  "https://ss4.scej-network.jp:20443": "http://127.0.0.1",', ]; 
-  else var dict = [ statsServerLineNumber + '|  "https://ss4.scej-network.jp:20443": "http://thehuntersdream.com",', ];
-  Context.ReplaceLinesInTextFile(handlerHostOverridesFilePath, dict);
-  var instanceHostOverridesFilePath = System.IO.Path.Combine(instanceUserFolderPath, "host_overrides.json");
-  System.IO.File.Copy(handlerHostOverridesFilePath, instanceHostOverridesFilePath, true);
+  setupUserConfig(instanceUserFolderPath, serversOption);
 
   //Create custom_config folder and copy Bloodborne custom config for each instance
-  var handlerCustomConfigFilePath = System.IO.Path.Combine(Game.Folder, "configs\\CUSTOM_CONFIG.json");
-  var instanceCustomConfigFolderPath = System.IO.Path.Combine(instanceUserFolderPath, "custom_configs");
-  System.IO.Directory.CreateDirectory(instanceCustomConfigFolderPath);
-  var instanceCustomConfigFilePath = System.IO.Path.Combine(instanceCustomConfigFolderPath, titleId + ".json");
-  System.IO.File.Copy(handlerCustomConfigFilePath, instanceCustomConfigFilePath, true);
+  setupBloodborneCustomConfig(instanceUserFolderPath, titleId);
 };
