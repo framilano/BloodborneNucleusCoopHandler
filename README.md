@@ -1,5 +1,5 @@
-# Bloodborne Nucleus Co-op Handler
-Nucleus Co-op splitscreen handler for Bloodborne using shadPS4 emulation
+# Bloodborne Splitscreen Handler
+A Bloodborne splitscreen handler for Nucleus Co-op using shadPS4 emulation
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
 
