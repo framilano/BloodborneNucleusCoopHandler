@@ -12,7 +12,7 @@ To have a full offline experience we need to run both these servers together, th
 1. The [NoDreamForHunter](https://github.com/fhody125-web/NoDreamForHunter/) from fhody125-web gives us an offline stats server
 2. The [Shadnet-P2P](https://github.com/Wozzardman/shadnet-p2p) from Wozzardman gives us an offline shadnet server that supports co-op and summonings.
 
-Both these servers will run when launching the handler automatically, I added an option too to just use the official [The Hunter'ss Dream](https://thehuntersdream.com/), but Wozzardman fork is still required for co-op.
+Both these servers will run when launching the handler automatically, I added an option too to just use the official [The Hunter's Dream](https://thehuntersdream.com/), but Wozzardman fork is still required for co-op.
 
 ## How to use
 1. Download the latest [release](https://github.com/framilano/BloodborneNucleusHandler/releases) and unzip it
@@ -45,7 +45,7 @@ I already released a [Linux Bloodborne handler for PartyDeck](https://github.com
 - [ ] Support for other servers other than Wozzardman forks
 
 ## AI Disclaimer
-This project is not being hosted on Nucleus Co-op because it has been falsely accused of being developed using AI, a less than 300 rows js script that I made for fun in a weekend. 
+This project is not being hosted on Nucleus Co-op because it has been falsely accused of being developed using AI, a less than 300 lines js script that I made for fun in a weekend. 
 This is completely false and based on nothing, when I asked the mods of Nucleus for an explanation or the chance to "prove" that this is 100% human written code and even proposing to just call me and glady explain every choice that I made in it they promptly banned me for 7 days on their Discord Server without saying a word. So no, this very small project wasn't written with AI, maybe I used Google AI Overview to check some english translations for a bunch of terms and checked how to lower a string in JS because I couldn't remember the correct syntax.
 
 ## Support
