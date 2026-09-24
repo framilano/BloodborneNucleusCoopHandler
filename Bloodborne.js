@@ -16,10 +16,10 @@ Game.AddOption("Stats and Co-op Servers Combo", "Which servers setup shall we us
 
 //Ask if we should enabled the Wozzardman seamless support
 var seamlessOptions = ["Yes", "No"];
-Game.AddOption("Experimental Seamless Support", "Shall we enable Wozzardman experimental Seamless support? (Only makes sense if you selected a server option that includes Wozzardman", "seamlessOption", seamlessOptions);
+Game.AddOption("Experimental Seamless Support", "Shall we enable Wozzardman experimental Seamless support? (Only makes sense if you selected a server option that includes Wozzardman)", "seamlessOption", seamlessOptions);
 
 //Ask for credentials for each instance
-Game.AddOption("Player 0 Custom Server Username", "Enter your Player0 username for the online custom server (Only makes sense if you selected a server option for a third party server like NoDreamForTheHunter)", "customServerPlayer0HunterUsername", []);
+Game.AddOption("Player 0 Custom Server Username", "Enter your Player0 username for the online custom server (You can leave these credentials blank if using Wozzardman co-op server, meanwhile you must insert them to connect to servers like NoDreamForTheHunter)", "customServerPlayer0HunterUsername", []);
 Game.AddOption("Player 0 Custom Server Password", "Enter your Player0 password for the online custom server", "customServerPlayer0HunterPassword", []);
 Game.AddOption("Player 1 Custom Server Username", "Enter your Player1 username for the online custom server", "customServerPlayer1HunterUsername", []);
 Game.AddOption("Player 1 Custom Server Password", "Enter your Player1 password for the online custom server", "customServerPlayer1HunterPassword", []);
@@ -39,8 +39,8 @@ Game.SymlinkGame = true;
 Game.SymlinkFolders = false;
 Game.ExecutableName = "shadPS4.exe";
 Game.GUID = "Bloodborne";
-Game.MaxPlayers = 4;
-Game.MaxPlayersOneMonitor = 4;
+Game.MaxPlayers = 3;
+Game.MaxPlayersOneMonitor = 3;
 Game.UseNucleusEnvironment = true;
 Game.CMDLaunch = true;
 Game.Hook.ForceFocus = true;
@@ -289,7 +289,7 @@ Game.Play = function() {
   var instanceUserFolderPath =  System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
   System.IO.Directory.CreateDirectory(instanceUserFolderPath);
   
-  //Set up server, register clients and copy the host_overrides.json only if using wozzardman and local stats server
+  //Set up server, register clients and copy the host_overrides.json only if using wozzardman fork
   if (serversOption != serversOptions[2]) {
     //Run the servers and register the clients
     setupShadnetServer(seamlessOption, serversOption);
