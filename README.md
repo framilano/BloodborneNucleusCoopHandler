@@ -3,6 +3,8 @@ A Bloodborne splitscreen handler for Nucleus Co-op using shadPS4 emulation
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
 
+This work is based on Wozzardman forks for coop and fhody125 for
+
 ## How does it work
 Bloodborne servers emulation currently requires two components:
 - **A stats server**, that handles user messages, ghosts and generic stats
@@ -12,6 +14,8 @@ To have a full offline experience we need to run both these servers together, th
 1. The [NoDreamForHunter](https://github.com/fhody125-web/NoDreamForHunter/) from fhody125-web gives us an offline stats server
 2. The [Shadnet-P2P](https://github.com/Wozzardman/shadnet-p2p) from Wozzardman gives us an offline shadnet server that supports co-op and summonings.
 
+## Read First
+**These two server forks are outdated, some folks on BloodbornePC Discord Server are already updating them and soon they'll open source their projects so you can run these stuff locally, as soon as they'll do that I'll include these new servers on the handler. So expect things to change rapidly in next few weeks, Seamless Coop is almost here!**
 
 ## How to use
 1. Download the latest [release](https://github.com/framilano/BloodborneNucleusHandler/releases) and unzip it
