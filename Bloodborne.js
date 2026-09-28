@@ -4,6 +4,8 @@ Hub.Maintainer.Name = "framilano";
 Hub.Maintainer.Id = "0xMRJDltsx0zljSu6";
 
 const LOCAL_IP = "127.0.0.1";
+const SHADNET_FORK = "wozzardman-fork"
+const NODREAMFORTHEHUNTER_URL = "game.nodreamforthehunter.com"
 
 //Ask user for Bloodborne game files folder path
 Game.AddOption("Bloodborne Folder Path", "Enter Bloodborne folder path (the CUSAXXXXX folder containing eboot.bin)", "bloodborneFolderPath", []);
@@ -22,7 +24,7 @@ Game.AddOption(
   "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
   "- 127.0.0.1, will setup locally a stats server,\n" +
   "- thehuntersdream.com, will connect you to the shadPS4 team hosted server,\n" +
-  "- game.nodreamforthehunter.com, will connect you to NoDreamForTheHunter (it requires you to register a player for each instance)",
+  "- " + NODREAMFORTHEHUNTER_URL + ", will connect you to NoDreamForTheHunter",
   "statsServerIpOption", []
 );
 
@@ -31,7 +33,7 @@ Game.AddOption(
   "Co-op Server IP",
   "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
   "- 127.0.0.1, will setup locally a stats server,\n" + 
-  "- game.nodreamforthehunter.com, will connect you to NoDreamForTheHunter (it requires you to register a player for each instance)",
+  "- " + NODREAMFORTHEHUNTER_URL + ", will connect you to NoDreamForTheHunter (it requires you to register a player for each instance)",
   "coopServerIpOption", 
   []
 );
@@ -40,7 +42,7 @@ Game.AddOption(
 var seamlessOptions = ["Yes", "No"];
 Game.AddOption(
   "Experimental Seamless Support", 
-  "Shall we enable Wozzardman experimental Seamless support? (Only makes sense if you selected a co-op server option that uses Wozzardman)", 
+  "Shall we enable Experimental Seamless support? (Only makes sense if you selected a co-op server option that supports this feature)", 
   "seamlessOption", 
   seamlessOptions
 );
@@ -236,19 +238,19 @@ function setupCoopShadnetServer(seamlessOption) {
   //Server setup only during first instance launch  
   if (Context.PlayerID == 0) {
     //Enabling experimental Seamless if requested by the user
-    var handlerShadnetConfigFilePath = System.IO.Path.Combine(Game.Folder, "shadnet\\wozzardman-fork\\shadnet.cfg");
+    var handlerShadnetConfigFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_FORK, "shadnet.cfg");
     var seamlessLineNumber = Context.FindLineNumberInTextFile(handlerShadnetConfigFilePath, 'BloodborneSeamlessCoop', Nucleus.SearchType.Contains); 
     if (seamlessOption == "Yes") var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=true', ]; 
     else var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=false', ]; 
     Context.ReplaceLinesInTextFile(handlerShadnetConfigFilePath, dict);
     //Start main coop server
-    var handlerShadnetExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet\\wozzardman-fork\\shadnet.exe");
+    var handlerShadnetExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_FORK, "shadnet.exe");
     Context.StartProcess(handlerShadnetExecutableFilePath, "", false);
     System.Threading.Thread.Sleep(3000); //Wait a bit before registering the clients
   }
 
   //Register Hunter on the server for each instance
-  var handlerShadnetSampleExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet\\wozzardman-fork\\shadnet-sample.exe");
+  var handlerShadnetSampleExecutableFilePath = System.IO.Path.Combine(Game.Folder,  "shadnet", SHADNET_FORK, "shadnet-sample.exe");
   Context.StartProcess(handlerShadnetSampleExecutableFilePath, "127.0.0.1 31313 register Hunter" + Context.PlayerID + " 12345 hunter" + Context.PlayerID + "@placeholder.com NucleusCoopBloodborneHandler", false)
   Handler.Log("[STOP setupCoopShadnetServer]");
 }
@@ -310,30 +312,43 @@ function setupBloodborneCustomConfig(instanceUserFolderPath, titleId, coopServer
 
   var shadnetServerLineNumber = Context.FindLineNumberInTextFile(instanceCustomConfigFilePath, 'shadnet_server', Nucleus.SearchType.Contains); 
   var shadnetWebApiServerLineNumber = Context.FindLineNumberInTextFile(instanceCustomConfigFilePath, 'shadnet_webapi_server', Nucleus.SearchType.Contains); 
-
-  var dict = [ 
+  var dict = [
     shadnetServerLineNumber + '|placeholderip|' + coopServerIpOption, 
     shadnetWebApiServerLineNumber + '|placeholderip|' +  coopServerIpOption, 
   ];
-
+  
   Context.ReplacePartialLinesInTextFile(instanceCustomConfigFilePath, dict);
+  
+  if (coopServerIpOption == NODREAMFORTHEHUNTER_URL) {
+    var audioSectionLineNumber = Context.FindLineNumberInTextFile(instanceCustomConfigFilePath, '"Audio": {', Nucleus.SearchType.Contains); 
+    var dict = [ audioSectionLineNumber + '|"Audio": {|  "Audio": {\n    "voice_chat_enabled": 0,', ]
+    Context.ReplacePartialLinesInTextFile(instanceCustomConfigFilePath, dict);
+  }
 
-  Handler.Log("[START setupBloodborneCustomConfig]");
-
+  Handler.Log("[STOP setupBloodborneCustomConfig]");
 }
 
-function setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath) {
+function setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath, coopServerIpOption) {
+  Handler.Log("[START setupPatchesAndLaunchArgs]")
   var handlerBloodbornePatchesFilePath = System.IO.Path.Combine(Game.Folder, "patches\\BloodborneHandler.xml");
   if (Context.PlayerID == 0) { setupPatches(handlerBloodbornePatchesFilePath, resolutionOption); }   //Replace Bloodborne.xml and edit it only with the first instance, we don't need to do this more than once
   var ebootBinFilePath =  System.IO.Path.Combine(bloodborneFolderPath, "eboot.bin");
-  //This env var only makes sense with wozzardman fork
+  //This env var if server and client support seamless coop
   if (seamlessOption == seamlessOptions[0])   System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "1");
   else System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "0");
+  
+  //This is necessary for nodreamforhunters same ip connections
+  if (coopServerIpOption == NODREAMFORTHEHUNTER_URL) {
+    Handler.Log("Setting env vars for NoDreamForTheHunter...")
+    System.Environment.SetEnvironmentVariable("SHADPS4_FORCE_RELAY", "1");
+    System.Environment.SetEnvironmentVariable("SHADPS4_P2P_PORT", "140" + Context.PlayerID);
+    Handler.Log("PORT " + "140" + Context.PlayerID);
+  }
   Context.StartArguments = "--patch \"" + handlerBloodbornePatchesFilePath + "\" --game \"" + ebootBinFilePath + "\"";
+  Handler.Log("[STOP setupPatchesAndLaunchArgs]")
 }
 
 Game.Play = function() {
-
   //User answers
   var bloodborneFolderPath = Context.Options["bloodborneFolderPath"].trim();
   var resolutionOption = Context.Options["resolutionOption"].trim();
@@ -349,7 +364,7 @@ Game.Play = function() {
   Handler.Log(titleId);
 
   //Load patches from Bloodborne.xml in handler folder and configure env variables
-  setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath);
+  setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath, coopServerIpOption);
 
   //Creating instance user folder
   var instanceUserFolderPath =  System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
