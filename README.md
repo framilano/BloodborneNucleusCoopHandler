@@ -14,8 +14,8 @@ To have a full offline experience we need to run both these servers together, th
 1. The [NoDreamForHunter](https://github.com/fhody125-web/NoDreamForHunter/) from fhody125-web gives us an offline stats server
 2. The [Shadnet-P2P](https://github.com/Wozzardman/shadnet-p2p) from Wozzardman gives us an offline shadnet server that supports co-op and summonings.
 
-## Read First
-**These two server forks are outdated, some folks on BloodbornePC Discord Server are already updating them and soon they'll open source their projects so you can run these stuff locally, as soon as they'll do that I'll include these new servers on the handler. So expect things to change rapidly in next few weeks, Seamless Coop is almost here!**
+## Read this first
+**These two server forks are outdated, some folks on BloodbornePC Discord Server are updating them and soon they'll open source their projects so we can run these stuff locally, I'll include these new servers on the handler as soon as they are available. So expect things to change rapidly in next few weeks, Seamless Coop is almost here!**
 
 ## How to use
 1. Download the latest [release](https://github.com/framilano/BloodborneNucleusHandler/releases) and unzip it
