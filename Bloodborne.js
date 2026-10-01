@@ -4,7 +4,8 @@ Hub.Maintainer.Name = "framilano";
 Hub.Maintainer.Id = "0xMRJDltsx0zljSu6";
 
 const LOCAL_IP = "127.0.0.1";
-const SHADNET_FORK = "wozzardman-fork"
+const SHADNET_COOP_FORK = "clsamg22-stats-coop-server"
+const SHADNET_STATS_FORK = "clsamg22-stats-coop-server"
 const NODREAMFORTHEHUNTER_URL = "game.nodreamforthehunter.com"
 
 //Ask user for Bloodborne game files folder path
@@ -57,7 +58,7 @@ Game.AddOption("Player 2 Custom Server Password", "Enter your Player2 password f
 
 Game.ExecutableContext = [];
 Game.DirExclusions = [];
-Game.KillProcessesOnClose = ["shadnet", "NoDreamForHunter"]; //Automatically closes this list of processes (names of the executables)
+Game.KillProcessesOnClose = ["shadnet", "NoDreamForHunter", "BBSC-GameServer"]; //Automatically closes this list of processes (names of the executables)
 Game.DirSymlinkExclusions = [];
 Game.FileSymlinkExclusions = [];
 Game.FileSymlinkCopyInstead = [];
@@ -68,8 +69,8 @@ Game.SymlinkGame = true;
 Game.SymlinkFolders = false;
 Game.ExecutableName = "shadPS4.exe";
 Game.GUID = "Bloodborne";
-Game.MaxPlayers = 3;
-Game.MaxPlayersOneMonitor = 3;
+Game.MaxPlayers = 4;
+Game.MaxPlayersOneMonitor = 4;
 Game.UseNucleusEnvironment = true;
 Game.Hook.ForceFocus = true;
 Game.Hook.ForceFocusWindowName = "shadPS4";
@@ -87,16 +88,16 @@ Game.UserProfileConfigPath = "";
 Game.UserProfileSavePathNoCopy = true;
 Game.UserProfileConfigPathNoCopy = true;
 Game.Description = 
-  "Bloodborne Splitscreen Co-op based on Wozzardman and fhody125-web forks of shadnet server.\n\n" +
+  "Bloodborne Splitscreen Co-op based on shadnet emulation of stats and coop servers, with support for both local and online ones.\n\n" +
   "Required files:\n" +
   "- Bloodborne game files\n\n" +
   "Instructions:\n" + 
-  "The only required step is selecting the shadPS4.exe executable contaned in this handler folder.\n\n" + 
+  "The only required step is selecting the shadPS4.exe executable, depending if it's the official one or a fork.\n\n" + 
   "A bunch of performances patches are enabled by default, you can disable them by editing *Bloodborne.xml* contained in this handler *patches* folder.\n" + 
-  "This exact same handler is available on Linux thanks to PartyDeck.";
+  "This handler is also available on Linux thanks to PartyDeck.";
 Game.PauseBetweenContextAndLaunch = 0;
 Game.PauseBetweenProcessGrab = 0;
-Game.PauseBetweenStarts = 0;
+Game.PauseBetweenStarts = 5;
 
 // OUTDATED OPTIONS, DISABLED TO AVOID CONFLICTS
 Game.HookSetCursorPos = false;
@@ -220,11 +221,19 @@ function setupPatches(handlerBloodbornePatchesFilePath, resolutionOption) {
 /**
  * Setting up stats shadnet server
  */
-function setupStatsShadnetServer(seamlessOption) {
+function setupStatsShadnetServer() {
   Handler.Log("[START setupStatsShadnetServer]");
 
-  var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet\\fhody125-web-fork\\NoDreamForHunter.exe");
-  Context.StartProcess(handlerStatsExecutableFilePath, "", false);
+  var executable = "";
+  var arguments = "";
+  if (SHADNET_STATS_FORK == "clsamg22-stats-coop-server") {
+    executable = "BBSC-GameServer.exe";
+    arguments = "--shadnet 127.0.0.1";
+  } else {
+    executable = "NoDreamForHunter.exe";
+  }
+  var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_STATS_FORK, executable);
+  Context.StartProcess(handlerStatsExecutableFilePath, arguments, false);
 
   Handler.Log("[STOP setupStatsShadnetServer]");
 }
@@ -238,19 +247,19 @@ function setupCoopShadnetServer(seamlessOption) {
   //Server setup only during first instance launch  
   if (Context.PlayerID == 0) {
     //Enabling experimental Seamless if requested by the user
-    var handlerShadnetConfigFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_FORK, "shadnet.cfg");
+    var handlerShadnetConfigFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_COOP_FORK, "shadnet.cfg");
     var seamlessLineNumber = Context.FindLineNumberInTextFile(handlerShadnetConfigFilePath, 'BloodborneSeamlessCoop', Nucleus.SearchType.Contains); 
     if (seamlessOption == "Yes") var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=true', ]; 
     else var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=false', ]; 
     Context.ReplaceLinesInTextFile(handlerShadnetConfigFilePath, dict);
     //Start main coop server
-    var handlerShadnetExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_FORK, "shadnet.exe");
+    var handlerShadnetExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_COOP_FORK, "shadnet.exe");
     Context.StartProcess(handlerShadnetExecutableFilePath, "", false);
     System.Threading.Thread.Sleep(3000); //Wait a bit before registering the clients
   }
 
   //Register Hunter on the server for each instance
-  var handlerShadnetSampleExecutableFilePath = System.IO.Path.Combine(Game.Folder,  "shadnet", SHADNET_FORK, "shadnet-sample.exe");
+  var handlerShadnetSampleExecutableFilePath = System.IO.Path.Combine(Game.Folder,  "shadnet", SHADNET_COOP_FORK, "shadnet-sample.exe");
   Context.StartProcess(handlerShadnetSampleExecutableFilePath, "127.0.0.1 31313 register Hunter" + Context.PlayerID + " 12345 hunter" + Context.PlayerID + "@placeholder.com NucleusCoopBloodborneHandler", false)
   Handler.Log("[STOP setupCoopShadnetServer]");
 }
@@ -371,7 +380,7 @@ Game.Play = function() {
   System.IO.Directory.CreateDirectory(instanceUserFolderPath);
   
   //Run the servers and register the clients
-  if (statsServerIpOption == LOCAL_IP && Context.PlayerID == 0) setupStatsShadnetServer(seamlessOption);
+  if (statsServerIpOption == LOCAL_IP && Context.PlayerID == 0) setupStatsShadnetServer();
 
   //Set up coop server
   if (coopServerIpOption == LOCAL_IP) setupCoopShadnetServer(seamlessOption);
