@@ -13,7 +13,7 @@ To have a full offline experience we need to run both these servers together, th
 2. The [Shadnet-P2P](https://github.com/Wozzardman/shadnet-p2p) from Wozzardman gives us an offline shadnet server that supports co-op and summonings.
 
 ## Read this first
-**1. These two server forks are outdated, some folks on BloodbornePC Discord Server are updating them and soon they'll open source their projects so we can run these stuff locally, I'll include these new servers on the handler as soon as they are available. So expect things to change rapidly in next few weeks, Seamless Coop is almost here!**
+**Bloodborne PC scene is evolving rapidly, right now I'm only working on shadPS4 forks support, but when these Bloodborne ports become more stable I'm gonna write an handler for them.**
 
 ## How to use
 1. Download the latest [release](https://github.com/framilano/BloodborneNucleusHandler/releases) and unzip it
@@ -47,7 +47,7 @@ I already released a [Linux Bloodborne handler for PartyDeck](https://github.com
 
 ## Todo
 - [ ] Support for [BBHost](https://github.com/droogie/bbhost)
-- [ ] Waiting for a proper Seamless Co-op mod
+- [ ] Waiting for a proper Seamless Co-op mod (on shadPS4)
 - [X] Support for other servers other than Wozzardman forks
 
 ## AI Disclaimer
