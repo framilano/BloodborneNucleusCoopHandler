@@ -15,13 +15,13 @@ Game.KillProcessesOnClose = ["bbhost"]; //Automatically closes this list of proc
 Game.DirSymlinkExclusions = [];
 Game.FileSymlinkExclusions = [];
 Game.FileSymlinkCopyInstead = [];
-Game.GameName = "Bloodborne (BBHost)";
+Game.GameName = "Bloodborne-BBHost";
 Game.HandlerInterval = 100;
 Game.SymlinkExe = false;
 Game.SymlinkGame = true;
 Game.SymlinkFolders = false;
 Game.ExecutableName = "bbhost.exe";
-Game.GUID = "Bloodborne (BBHost)";
+Game.GUID = "Bloodborne-BBHost";
 Game.LauncherTitle = "bbhost setup";
 Game.MaxPlayers = 4;
 Game.MaxPlayersOneMonitor = 4;
@@ -46,7 +46,7 @@ Game.Description =
   "Required files:\n" +
   "- Bloodborne game files\n\n" +
   "Instructions:\n" + 
-  "The only required step is selecting the bbhost.exe executable.";
+  "The only required step is selecting the bbhost.exe executable, I highly suggest editing bbhost.toml settings contained in each instance AppData/Roaming/bbhost folder without using the launcher.";
 Game.PauseBetweenContextAndLaunch = 0;
 Game.PauseBetweenProcessGrab = 0;
 Game.PauseBetweenStarts = 5;
