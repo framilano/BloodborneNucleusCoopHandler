@@ -15,6 +15,11 @@ Bloodborne handlers for both [shadPS4](https://github.com/shadps4-emu/shadps4) a
   - [How to install](#how-to-install-1)
   - [Handler Instructions](#handler-instructions-1)
   - [Extra](#extra-1)
+- [Building](#building)
+- [Linux](#linux)
+- [Todo](#todo)
+- [AI Disclaimer](#ai-disclaimer)
+- [Support](#support)
 
 # bbhost
 ## How does it work
