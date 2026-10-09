@@ -3,7 +3,18 @@ Bloodborne handlers for both [shadPS4](https://github.com/shadps4-emu/shadps4) a
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
 
-**The following instructions are split between bbhost and shadPS4, so read only that you're interested with!**
+## Table of contents
+- [bbhost](#bbhost)
+  - [How does it work](#how-does-it-work)
+  - [How to install](#how-to-install)
+  - [Handler Instructions](#handler-instructions)
+  - [Extra](#extra)
+- bbport TODO!
+- [shadPS4](#shadps4)
+  - [How does it work](#how-does-it-work-1)
+  - [How to install](#how-to-install-1)
+  - [Handler Instructions](#handler-instructions-1)
+  - [Extra](#extra-1)
 
 # bbhost
 ## How does it work
