@@ -12,13 +12,13 @@ Uses bbhost official [server](https://thehuntersdream.com/) to connect two local
 
 ## How to install
 1. Download the latest `Bloodborne-BBHost.js` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
-2. Move the downloaded file to the NucleusCoop handlers folder
+2. Move the downloaded file to the NucleusCoop `handlers` folder
 3. Select `bbhost.exe` from NucleusCoop GUI
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
-1. The handler will ask you select your Bloodborne CUSAXXXXX folder and your `eboot-bin.decrypted` file path
-2. Done, edit the bbhost.toml options, login into your accounts and play!
+1. The handler will ask you select your Bloodborne CUSAXXXXX folder and your `eboot-bin.decrypted`
+2. Done, edit the `bbhost.toml` options, login into your accounts and play!
 
 ## Extra
 - Enable the in-game music only on the first instance, so you won't have music echoing while playing
