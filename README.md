@@ -23,6 +23,9 @@ The last version for shadPS4 is 0.7, releases after that one will focus on Blood
 - [Support](#support)
 
 # bbhost
+<img width="2559" height="1436" alt="Screenshot 2026-10-10 124222" src="https://github.com/user-attachments/assets/01ecbf7f-6665-4977-b4b9-4ad28961958a" />
+Supports 32:9 ratios!
+
 ## How does it work
 Uses bbhost official [server](https://thehuntersdream.com/) to connect two local players in the same instance. You can play locally with 2 or more player and join other people online! It runs better than shadPS4 and has more PC specific customizations too.
 **This handler is always-online**
