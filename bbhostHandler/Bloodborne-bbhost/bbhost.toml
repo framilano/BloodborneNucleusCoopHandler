@@ -1,0 +1,23 @@
+
+[paths]
+app0 = ""
+eboot = ""
+data = ""
+
+[online]
+host = "thehuntersdream.com"
+scheme = "https"
+verify_tls = true
+require_account = true
+auth_server = "https://thehuntersdream.com"
+
+[update]
+check = true
+
+[startup]
+# Skip the three company logos and the Exit Game warning (Bloodborne 1.09 only).
+skip_intro = true
+setup_window = false
+
+[bbhost]
+config_version = 4
