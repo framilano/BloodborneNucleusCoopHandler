@@ -1,5 +1,6 @@
 # Bloodborne Nucleus Co-op Handler
-Bloodborne handlers for both [shadPS4](https://github.com/shadps4-emu/shadps4) and [bbhost](https://github.com/droogie/bbhost)
+Bloodborne handlers for both [shadPS4](https://github.com/shadps4-emu/shadps4) and [bbhost](https://github.com/droogie/bbhost). 
+The last version for shadPS4 is 0.7, releases after that one will focus on Bloodborne translation layers like bbhost and bbport, these versions have better performances so it makes more sense to work on them.
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
 
@@ -51,7 +52,7 @@ To have a full offline experience we need to run both these servers together, th
 2. The [Shadnet-P2P](https://github.com/Wozzardman/shadnet-p2p) from Wozzardman gives us an offline shadnet server that supports co-op and summonings.
 
 ## How to install
-1. Download the latest [release](https://github.com/framilano/BloodborneNucleusHandler/releases) and unzip it
+1. Download handler version 0.7 [release](https://github.com/framilano/BloodborneNucleusCoopHandler/releases/tag/0.7) and unzip it
 2. Copy the content of the extracted folder to `<YOUR_NUCLEUS_INSTALLATION>/handlers`, both the `Bloodborne` folder and `Bloodborne.js`
 3. If you want to play with **Wozzardman** fork of the coop server, download the latest released `shadPS4.exe` from Wozzardman [shadp2p repository](https://github.com/Wozzardman/shadp2p/releases).
 4. If you want to play using the **NoDreamForTheHunter** version, download the latest release `shadps4.exe` from their [site](https://nodreamforthehunter.com/howtoplay) and rename it to `shadPS4.exe`
