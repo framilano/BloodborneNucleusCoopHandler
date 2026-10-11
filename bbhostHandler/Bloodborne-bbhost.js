@@ -25,55 +25,51 @@ Game.AddOption("Desidered frame rate cap",
   framerateOptions
 );
 
-/**
- //Ask if the user wants to skip the launcher
- var skipLauncherOptions = ["Yes", "No"];
- Game.AddOption("Launcher skip", 
-   "Should we skip bbhost launcher?", 
-   "skipLauncherOption", 
-   skipLauncherOptions
- );
- * 
- */
+//#################### Game Info ####################
 
-Game.ExecutableContext = [];
-Game.DirExclusions = [];
-Game.KillProcessesOnClose = ["bbhost"]; //Automatically closes this list of processes (names of the executables)
-Game.DirSymlinkExclusions = [];
-Game.FileSymlinkExclusions = [];
-Game.FileSymlinkCopyInstead = [];
-Game.GameName = "Bloodborne-bbhost";
-Game.HandlerInterval = 100;
-Game.SymlinkExe = false;
-Game.SymlinkGame = true;
-Game.SymlinkFolders = false;
-Game.ExecutableName = "bbhost.exe";
+Game.ExecutableName = "bbhost.exe";                      
 Game.GUID = "Bloodborne-bbhost";
-Game.LauncherTitle = "bbhost setup";
-Game.MaxPlayers = 4;
+Game.GameName = "Bloodborne-bbhost";
 Game.MaxPlayersOneMonitor = 4;
+Game.MaxPlayers = 4;
+
+//#################### File System ####################
+
+Game.SymlinkGame = true;
+Game.HardlinkGame = true;
+Game.RunLauncherAndExe = false;
+Game.ExecutableNames = ["bbhost.exe"]
+
+//#################### Nucleus Co-op Environment ####################
+
 Game.UseNucleusEnvironment = true;
-Game.Hook.ForceFocus = true;
-Game.Hook.ForceFocusWindowName = "Bloodborne (bbhost)";
+Game.UserProfileSavePath = "AppData\\Roaming\\bbhost";
+
+//#################### Focus ####################
+
 Game.HasDynamicWindowTitle = true;
 Game.RefreshWindowAfterStart = true;
 Game.ResetWindows = true;
 Game.SetForegroundWindowElsewhere = true;
-Game.Hook.DInputEnabled = false;
-Game.Hook.XInputEnabled = false;
-Game.Hook.XInputReroute = false;
-Game.Hook.CustomDllEnabled = false;
-Game.BlockRawInput = false;
-Game.UserProfileSavePath = "AppData\\Roaming\\bbhost";
+Game.Hook.ForceFocus = true;
+Game.Hook.ForceFocusWindowName = "Bloodborne (bbhost)";
+Game.ForceProcessPick = false;
+
+//#################### Extra ####################
+
+Game.PauseBetweenContextAndLaunch = 0;
+Game.PauseBetweenProcessGrab = 0;
+Game.PauseBetweenStarts = 0;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on translation layer bbhost.\n\n" +
   "Required files:\n" +
   "- Bloodborne game files\n\n" +
   "Instructions:\n" + 
-  "The only required step is selecting the bbhost.exe executable, I highly suggest editing bbhost.toml settings contained in each instance AppData/Roaming/bbhost folder without using the launcher.";
-Game.PauseBetweenContextAndLaunch = 3;
-Game.PauseBetweenProcessGrab = 3;
-Game.PauseBetweenStarts = 3;
+  "The only required step is selecting the bbhost.exe executable.";
+Game.ForceProcessSearch = false;
+Game.KillProcessesOnClose = [ "bbhost" ];
+
+//#################### ProtoInput ####################
 
 Game.SupportsMultipleKeyboardsAndMice = true;
 // Deprecated options
@@ -127,7 +123,8 @@ Game.ProtoInput.BlockedMessages = [ 0x0008 ]; // Blocks WM_KILLFOCUS
 Game.ProtoInput.RenameHandlesHook = false;
 Game.ProtoInput.RenameHandles = []
 ;Game.ProtoInput.RenameNamedPipes = [];
-// We can leave these on and not worry about input lock. // It doesn't matter if controller input still works since it won't get in the way
+// We can leave these on and not worry about input lock. 
+// It doesn't matter if controller input still works since it won't get in the way
 Game.ProtoInput.XinputHook = true;
 Game.ProtoInput.UseOpenXinput = true;
 Game.ProtoInput.UseDinputRedirection = false;
@@ -135,61 +132,10 @@ Game.ProtoInput.UseDinputRedirection = false;
 Game.Hook.DInputEnabled = false;
 Game.Hook.DInputForceDisable = false;
 Game.Hook.XInputEnabled = false;
-Game.Hook.XInputReroute = false
-;Game.Hook.CustomDllEnabled = false;
+Game.Hook.XInputReroute = false;
+Game.Hook.CustomDllEnabled = false;
 
 Game.ProtoInput.AutoHideTaskbar = true;
-Game.ProtoInput.OnInputLocked = function() {    
-  for (var i = 0; i < PlayerList.Count; i++)    {        
-    var player = PlayerList[i];
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetCursorPosHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.SetCursorPosHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyStateHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetAsyncKeyStateHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyboardStateHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.CursorVisibilityStateHookID);
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.FocusHooksHookID);
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.RawInputFilterID);
-    // Avoid the mouse move filter unless absolutely necessary as it can massively affect performance if the game gets primary input from mouse move moessages        
-    //ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseMoveFilterID);
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseActivateFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateAppFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseWheelFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseButtonFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.KeyboardButtonFilterID);
-    ProtoInput.SetDrawFakeCursor(player.ProtoInputInstanceHandle, false);
-    ProtoInput.StartFocusMessageLoop(player.ProtoInputInstanceHandle, 5, true, true, true, true, true);
-    // Disable the bypass: let the input be processed by Proto Input        
-    ProtoInput.SetRawInputBypass(player.ProtoInputInstanceHandle, false);    
-  }
-}
-Game.ProtoInput.OnInputUnlocked = function(){    
-  for (var i = 0; i < PlayerList.Count; i++)    {        
-    var player = PlayerList[i];
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetCursorPosHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.SetCursorPosHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyStateHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetAsyncKeyStateHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyboardStateHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.CursorVisibilityStateHookID);
-    // Intentionally disable focus so all the instances don't respond to input at the same time        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.FocusHooksHookID);
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.RawInputFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseMoveFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseActivateFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateAppFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseWheelFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseButtonFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.KeyboardButtonFilterID);
-    ProtoInput.SetDrawFakeCursor(player.ProtoInputInstanceHandle, false);
-    // Intentionally disable focus so all the instances don't respond to input at the same time       
-    ProtoInput.StopFocusMessageLoop(player.ProtoInputInstanceHandle);
-    // Enable the bypass: allow any raw input to pass       
-    ProtoInput.SetRawInputBypass(player.ProtoInputInstanceHandle, true);   
-  }
-}
 
 /**
  * Setting bbhost-options.toml file
