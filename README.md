@@ -1,5 +1,5 @@
 # Bloodborne Nucleus Co-op Handler
-Bloodborne handlers for both [shadPS4](https://github.com/shadps4-emu/shadps4) and [bbhost](https://github.com/droogie/bbhost). 
+Bloodborne handlers for both [shadPS4](https://github.com/shadps4-emu/shadps4), [bbhost](https://github.com/droogie/bbhost) and [bbport](https://github.com/Supermedo/bloodborne_pc). 
 The last version for shadPS4 is 0.7, releases after that one will focus on Bloodborne translation layers like bbhost and bbport, these versions have better performances so it makes more sense to work on them.
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
