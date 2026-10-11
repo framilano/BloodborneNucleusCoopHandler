@@ -66,8 +66,8 @@ Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p) and [fhody125-
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
-1. The handler will ask you select your Bloodborne CUSAXXXXX folder and your `eboot-bin.decrypted`
-2. The handler will ask you what stats and server IPs to use, type `127.0.0.1` in both to let the handler start the servers autonomously.
+1. To select your `CUSAXXXXX` folder where your Bloodborne games files are stored
+2. The handler will ask you which stats and server IPs to use, type `127.0.0.1` in both to let the handler start the servers autonomously.
 3. Enter your credentials, if using `127.0.0.1` as a coop server you must leave these fields blank, otherwise you must input both username and password for each player registered on the external coop server.
 4. When the handler starts the *Nucleus Coop Process Picker* will appear, you need to wait for the first instance of `Bloodborne.exe` to boot, click **Refresh** on the process picker and select process `bb-probe.exe`
 5. Repeat step 4 for each instance that starts automatically
