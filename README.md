@@ -29,6 +29,7 @@ The last version for shadPS4 is 0.7, releases after that one will focus on Blood
 
 # bbhost
 <img width="2559" height="1436" alt="Screenshot 2026-10-10 124222" src="https://github.com/user-attachments/assets/01ecbf7f-6665-4977-b4b9-4ad28961958a" />
+
 **This handler supports 32:9 ratios!**
 
 ## How does it work
