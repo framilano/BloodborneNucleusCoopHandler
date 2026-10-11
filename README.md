@@ -1,5 +1,6 @@
 # Bloodborne Nucleus Co-op Handler
 Bloodborne handlers for both [shadPS4](https://github.com/shadps4-emu/shadps4), [bbhost](https://github.com/droogie/bbhost) and [bbport](https://github.com/Supermedo/bloodborne_pc). 
+
 The last version for shadPS4 is 0.7, releases after that one will focus on Bloodborne translation layers like bbhost and bbport, these versions have better performances so it makes more sense to work on them.
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
@@ -31,12 +32,12 @@ The last version for shadPS4 is 0.7, releases after that one will focus on Blood
 **This handler supports 32:9 ratios!**
 
 ## How does it work
-**This handler only works with this [bbhost](https://github.com/droogie/bbhost)**
+**This handler only works with [bbhost](https://github.com/droogie/bbhost)**
 Uses bbhost official [server](https://thehuntersdream.com/) to connect two local players in the same instance. You can play locally with 2 or more player and join other people online! It runs better than shadPS4 and has more PC specific customizations too.
 **This handler is always-online**
 
 ## How to install
-1. Download the latest `Bloodborne-BBHost.js` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
+1. Download the latest `bbhostHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
 2. Move the downloaded file to the NucleusCoop `handlers` folder
 3. Select `bbhost.exe` from NucleusCoop GUI
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
@@ -58,7 +59,7 @@ Uses bbhost official [server](https://thehuntersdream.com/) to connect two local
 Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p) and [fhody125-web-fork](https://github.com/fhody125-web/NoDreamForHunter/) server forks to play coop **completely offline**! Online is not supported due to shadps4 server same IP limitations. It runs way better than shadPS4 and has more PC specific customizations too.
 
 ## How to install
-1. Download and extract the latest `Bloodborne-bbport.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
+1. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
 2. Move the downloaded files to the NucleusCoop `handlers` folder
 3. Select `Bloodborne.exe` from NucleusCoop GUI, 
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
