@@ -98,7 +98,7 @@ Game.ForceProcessPick = true;
 
 Game.PauseBetweenContextAndLaunch = 0;
 Game.PauseBetweenProcessGrab = 0;
-Game.PauseBetweenStarts = 5;
+Game.PauseBetweenStarts = 0;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on translation layer bbport.\n\n" +
   "Required files:\n" +
@@ -171,8 +171,8 @@ Game.ProtoInput.UseDinputRedirection = false;
 Game.Hook.DInputEnabled = false;
 Game.Hook.DInputForceDisable = false;
 Game.Hook.XInputEnabled = false;
-Game.Hook.XInputReroute = false
-;Game.Hook.CustomDllEnabled = false;
+Game.Hook.XInputReroute = false;
+Game.Hook.CustomDllEnabled = false;
 
 Game.ProtoInput.AutoHideTaskbar = true;
 Game.ProtoInput.OnInputLocked = function() {    
