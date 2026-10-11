@@ -5,9 +5,8 @@ Hub.Maintainer.Id = "va6S2wcYCxth3FSgZ";
 
 const LOCAL_IP = "127.0.0.1";
 const SHADPS4_STATS_URL = "thehuntersdream.com";
-const SHADPS4_COOP_URL = "srv.shadps4.net";
 const SHADNET_STATS_FORK = "fhody125-stats-server";
-const SHADNET_COOP_FORK = "wozzardman-fork";
+const SHADNET_COOP_FORK = "wozzardman-coop-server";
 
 //#################### Handler Options ####################
 
@@ -19,7 +18,7 @@ Game.AddOption(
   "Stats Server IP",
   "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
   "- 127.0.0.1, will setup locally a stats server,\n" +
-  "- thehuntersdream.com, will connect you to the shadPS4 team hosted server",
+  "- thehuntersdream.com, will connect you to the shadPS4 team hosted stats server",
   "statsServerIpOption", 
   []
 );
@@ -28,8 +27,7 @@ Game.AddOption(
 Game.AddOption(
   "Co-op Server IP",
   "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a stats server,\n" + 
-  "- srv.shadps4.net, will connect you to the shadPS4 team hosted server",
+  "- 127.0.0.1, will setup locally a stats server",
   "coopServerIpOption", 
   []
 );
@@ -98,8 +96,9 @@ Game.ForceProcessPick = true;
 
 //#################### Extra ####################
 
-Game.PauseBetweenProcessGrab = 0;
 Game.PauseBetweenContextAndLaunch = 0;
+Game.PauseBetweenProcessGrab = 0;
+Game.PauseBetweenStarts = 5;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on translation layer bbport.\n\n" +
   "Required files:\n" +
@@ -267,7 +266,7 @@ function setupCoopShadnetServer() {
 /**
  * Editing settings.json
  */
-function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, coopServerIpOption) {
+function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption) {
   Context.Log("[START setupBbPortSettingsConfig]");
 
   var handlerBbportSettingsFilePath = System.IO.Path.Combine(Game.Folder, "config\\settings.json");
@@ -295,6 +294,9 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
   var shadnetUsernameLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_npid', Nucleus.SearchType.Contains); 
   var shadnetPasswordLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_password', Nucleus.SearchType.Contains); 
   var shadnetCoopServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_server', Nucleus.SearchType.Contains); 
+  var shadnetStatsServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_community', Nucleus.SearchType.Contains); 
+
+  var statsServerUrl = statsServerIpOption == LOCAL_IP ? "http://127.0.0.1:31313" : "https://" + statsServerIpOption + ":31313";
 
   var hunterUsername = coopServerIpOption == LOCAL_IP ? "Hunter" + Context.PlayerID : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterUsername"].trim();
   var hunterPassword = coopServerIpOption == LOCAL_IP ? "12345" : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
@@ -306,6 +308,7 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
     shadnetUsernameLineNumber + '|  "online_npid": "' + hunterUsername +'",',
     shadnetPasswordLineNumber + '|  "online_password": "' + hunterPassword +'",',
     shadnetCoopServerLineNumber + '|  "online_server": "' + coopServerIpOption +':31313",',
+    shadnetStatsServerLineNumber + '|  "online_community": "' + statsServerUrl + '"'
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceBbportSettingsFilePath, dict);
@@ -348,14 +351,6 @@ Game.Play = function() {
   var statsServerIpOption = Context.Options["statsServerIpOption"].trim();
   var coopServerIpOption = Context.Options["coopServerIpOption"].trim();
 
-  //This is necessary for shadps4 server same ip connections
-  if (coopServerIpOption == SHADPS4_COOP_URL) {
-    Context.Log("Setting env vars for Shadps4CoopServer...")
-    System.Environment.SetEnvironmentVariable("SHADPS4_FORCE_RELAY", "1");
-    System.Environment.SetEnvironmentVariable("SHADPS4_P2P_PORT", "140" + Context.PlayerID);
-    Context.Log("PORT " + "140" + Context.PlayerID);
-  }
-
   //Run the servers and register the clients
   if (statsServerIpOption == LOCAL_IP && Context.PlayerID == 0) setupStatsShadnetServer();
 
@@ -364,7 +359,7 @@ Game.Play = function() {
 
   var handlerBbportFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
   //Setting up settings.json first
-  setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, coopServerIpOption);
+  setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption);
 
   var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
   //Setting up bbport.ini
