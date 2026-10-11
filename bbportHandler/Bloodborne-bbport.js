@@ -3,8 +3,36 @@ Hub.Handler.Id = "itvyiC7oPTx2Lvb7c";
 Hub.Maintainer.Name = "framilano";
 Hub.Maintainer.Id = "va6S2wcYCxth3FSgZ";
 
+const LOCAL_IP = "127.0.0.1";
+const SHADPS4_STATS_URL = "thehuntersdream.com";
+const SHADPS4_COOP_URL = "srv.shadps4.net";
+const SHADNET_STATS_FORK = "fhody125-stats-server";
+const SHADNET_COOP_FORK = "wozzardman-fork";
+
+//#################### Handler Options ####################
+
 //Ask user for Bloodborne game files folder path
 Game.AddOption("Bloodborne Folder Path", "Enter Bloodborne folder path (the CUSAXXXXX folder containing eboot.bin)", "bloodborneFolderPath", []);
+
+//Stats Server IP option
+Game.AddOption(
+  "Stats Server IP",
+  "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
+  "- 127.0.0.1, will setup locally a stats server,\n" +
+  "- thehuntersdream.com, will connect you to the shadPS4 team hosted server",
+  "statsServerIpOption", 
+  []
+);
+
+//Coop Server IP option
+Game.AddOption(
+  "Co-op Server IP",
+  "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
+  "- 127.0.0.1, will setup locally a stats server,\n" + 
+  "- srv.shadps4.net, will connect you to the shadPS4 team hosted server",
+  "coopServerIpOption", 
+  []
+);
 
 //Ask for the render resolution used by all instances
 var resolutionOptions = ["1280x720 (16:9)", "1920x1080 (16:9)", "2560x1440 (16:9)", "3840x2160 (16:9)"];
@@ -31,54 +59,57 @@ Game.AddOption("Desidered Upscaling Technology",
 );
 
 //Ask for credentials for each instance
-Game.AddOption("Player 0 Shadnet Username", "Enter your Player0 username for shadnet", "shadnetPlayer0HunterUsername", []);
-Game.AddOption("Player 0 Shadnet Password", "Enter your Player0 password shadnet", "shadnetPlayer0HunterPassword", []);
-Game.AddOption("Player 1 Shadnet Username", "Enter your Player1 username for shadnet", "shadnetPlayer1HunterUsername", []);
-Game.AddOption("Player 1 Shadnet Password", "Enter your Player1 password shadnet", "shadnetPlayer1HunterPassword", []);
-Game.AddOption("Player 2 Shadnet Username", "Enter your Player2 username for shadnet", "shadnetPlayer2HunterUsername", []);
-Game.AddOption("Player 2 Shadnet Password", "Enter your Player2 password shadnet", "shadnetPlayer2HunterPassword", []);
-Game.AddOption("Player 3 Shadnet Username", "Enter your Player3 username for shadnet", "shadnetPlayer3HunterUsername", []);
-Game.AddOption("Player 3 Shadnet Password", "Enter your Player3 password shadnet", "shadnetPlayer3HunterPassword", []);
+Game.AddOption("Player 0 Shadnet Username", "Enter your Player0 username for shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer0HunterUsername", []);
+Game.AddOption("Player 0 Shadnet Password", "Enter your Player0 password shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer0HunterPassword", []);
+Game.AddOption("Player 1 Shadnet Username", "Enter your Player1 username for shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer1HunterUsername", []);
+Game.AddOption("Player 1 Shadnet Password", "Enter your Player1 password shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer1HunterPassword", []);
+Game.AddOption("Player 2 Shadnet Username", "Enter your Player2 username for shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer2HunterUsername", []);
+Game.AddOption("Player 2 Shadnet Password", "Enter your Player2 password shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer2HunterPassword", []);
+Game.AddOption("Player 3 Shadnet Username", "Enter your Player3 username for shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer3HunterUsername", []);
+Game.AddOption("Player 3 Shadnet Password", "Enter your Player3 password shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer3HunterPassword", []);
 
-Game.ExecutableContext = [];
-Game.DirExclusions = [];
-Game.KillProcessesOnClose = []; //Automatically closes this list of processes (names of the executables)
-Game.DirSymlinkExclusions = [];
-Game.FileSymlinkExclusions = [];
-Game.FileSymlinkCopyInstead = [];
+//#################### Game Info ####################
+
+Game.ExecutableName = "Bloodborne.exe";                      
+Game.GUID = "Bloodborne-bbport";
 Game.GameName = "Bloodborne-bbport";
-Game.HandlerInterval = 100;
+Game.MaxPlayersOneMonitor = 4;
+Game.MaxPlayers = 4;
+
+//#################### File System ####################
+
 Game.SymlinkGame = true;
 Game.HardlinkGame = true;
-Game.ForceProcessPick = true;
+Game.RunLauncherAndExe = false;
 Game.ExecutableNames = ["Bloodborne.exe", "bb-probe.exe", "Play Bloodborne.exe"]
-Game.ExecutableName = "Bloodborne.exe";
-Game.GUID = "Bloodborne-bbport";
-Game.MaxPlayers = 4;
-Game.MaxPlayersOneMonitor = 4;
+
+//#################### Nucleus Co-op Environment ####################
+
 Game.UseNucleusEnvironment = true;
-Game.Hook.ForceFocus = true;
-Game.FakeFocus = true;
-Game.Hook.ForceFocusWindowName = "Bloodborne™";
-Game.HasDynamicWindowTitle = true;
-Game.RefreshWindowAfterStart = false;
-Game.ResetWindows = false;
-Game.SetForegroundWindowElsewhere = false;
-Game.Hook.DInputEnabled = false;
-Game.Hook.XInputEnabled = true;
-Game.Hook.XInputReroute = false;
-Game.Hook.CustomDllEnabled = false;
-Game.BlockRawInput = false;
 Game.UserProfileSavePath = "AppData\\Roaming\\bbport-launcher";
+
+//#################### Focus ####################
+
+Game.FakeFocus = true;
+Game.HookFocus = true;
+Game.HookInit = true;
+Game.PreventWindowDeactivation = false;
+Game.ForceProcessPick = true;
+
+//#################### Extra ####################
+
+Game.PauseBetweenProcessGrab = 0;
+Game.PauseBetweenContextAndLaunch = 0;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on translation layer bbport.\n\n" +
   "Required files:\n" +
   "- Bloodborne game files\n\n" +
   "Instructions:\n" + 
   "The only required step is selecting the Bloodborne.exe executable.";
-Game.PauseBetweenContextAndLaunch = 3;
-Game.PauseBetweenProcessGrab = 3;
-Game.PauseBetweenStarts = 3;
+Game.ForceProcessSearch = true;
+Game.KillProcessesOnClose = [ "NoDreamForTheHunter", "shadnet" ];
+
+//#################### ProtoInput ####################
 
 Game.SupportsMultipleKeyboardsAndMice = true;
 // Deprecated options
@@ -132,7 +163,8 @@ Game.ProtoInput.BlockedMessages = [ 0x0008 ]; // Blocks WM_KILLFOCUS
 Game.ProtoInput.RenameHandlesHook = false;
 Game.ProtoInput.RenameHandles = []
 ;Game.ProtoInput.RenameNamedPipes = [];
-// We can leave these on and not worry about input lock. // It doesn't matter if controller input still works since it won't get in the way
+// We can leave these on and not worry about input lock. 
+// It doesn't matter if controller input still works since it won't get in the way
 Game.ProtoInput.XinputHook = true;
 Game.ProtoInput.UseOpenXinput = true;
 Game.ProtoInput.UseDinputRedirection = false;
@@ -196,14 +228,49 @@ Game.ProtoInput.OnInputUnlocked = function(){
   }
 }
 
+/**
+ * Setting up stats shadnet server
+ */
+function setupStatsShadnetServer() {
+  Context.Log("[START setupStatsShadnetServer]");
+
+  var executable = "";
+  var arguments = "";
+  executable = "NoDreamForHunter.exe";
+
+  var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_STATS_FORK, executable);
+  Context.StartProcess(handlerStatsExecutableFilePath, arguments, false);
+
+  Context.Log("[STOP setupStatsShadnetServer]");
+}
+
+/**
+ * Setting up shadnet server and register clients manually
+ */
+function setupCoopShadnetServer() {
+  Context.Log("[START setupCoopShadnetServer]");
+
+  //Server setup only during first instance launch  
+  if (Context.PlayerID == 0) {
+    //Start main coop server
+    var handlerShadnetExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_COOP_FORK, "shadnet.exe");
+    Context.StartProcess(handlerShadnetExecutableFilePath, "", false);
+    System.Threading.Thread.Sleep(3000); //Wait a bit before registering the clients
+  }
+
+  //Register Hunter on the server for each instance
+  var handlerShadnetSampleExecutableFilePath = System.IO.Path.Combine(Game.Folder,  "shadnet", SHADNET_COOP_FORK, "shadnet-sample.exe");
+  Context.StartProcess(handlerShadnetSampleExecutableFilePath, "127.0.0.1 31313 register Hunter" + Context.PlayerID + " 12345 hunter" + Context.PlayerID + "@placeholder.com NucleusCoopBloodborneHandler", false)
+  Context.Log("[STOP setupCoopShadnetServer]");
+}
 
 /**
  * Editing settings.json
  */
-function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, hunter) {
+function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, coopServerIpOption) {
   Context.Log("[START setupBbPortSettingsConfig]");
 
-  var handlerBbportSettingsFilePath = System.IO.Path.Combine(Game.Folder, "settings.json");
+  var handlerBbportSettingsFilePath = System.IO.Path.Combine(Game.Folder, "config\\settings.json");
   var instanceBbportSettingsFilePath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "settings.json");
 
   var instanceBbportUserFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "user");
@@ -227,9 +294,10 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
   var fpsModeLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'fps_mode', Nucleus.SearchType.Contains); 
   var shadnetUsernameLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_npid', Nucleus.SearchType.Contains); 
   var shadnetPasswordLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_password', Nucleus.SearchType.Contains); 
+  var shadnetCoopServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_server', Nucleus.SearchType.Contains); 
 
-  var hunterUsername = Context.Options["shadnetPlayer" + Context.PlayerID + "HunterUsername"].trim();
-  var hunterPassword = Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
+  var hunterUsername = coopServerIpOption == LOCAL_IP ? "Hunter" + Context.PlayerID : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterUsername"].trim();
+  var hunterPassword = coopServerIpOption == LOCAL_IP ? "12345" : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
 
   var dict = [ 
     gameDirLineNumber + '|  "game_dir": "' + bloodborneFolderPath.replace(/\\/g, "/") + '",',
@@ -237,6 +305,7 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
     fpsModeLineNumber + '|  "fps_mode": "'+ framerateOption +'",',
     shadnetUsernameLineNumber + '|  "online_npid": "' + hunterUsername +'",',
     shadnetPasswordLineNumber + '|  "online_password": "' + hunterPassword +'",',
+    shadnetCoopServerLineNumber + '|  "online_server": "' + coopServerIpOption +':31313",',
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceBbportSettingsFilePath, dict);
@@ -249,7 +318,7 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
 function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption) {
   Context.Log("[START setupBbPortIniConfig]");
 
-  var handlerBbPortInitFilePath = System.IO.Path.Combine(Game.Folder, "bbport.ini");
+  var handlerBbPortInitFilePath = System.IO.Path.Combine(Game.Folder, "config\\bbport.ini");
   var instanceBbPortInitFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "bbport.ini");
 
   //Creating bbport.ini
@@ -276,15 +345,31 @@ Game.Play = function() {
   var resolutionOption = Context.Options["resolutionOption"].split(" ")[0];
   var framerateOption = Context.Options["framerateOption"];
   var upscalingOption = Context.Options["upscalingOption"].split(" ")[0];
+  var statsServerIpOption = Context.Options["statsServerIpOption"].trim();
+  var coopServerIpOption = Context.Options["coopServerIpOption"].trim();
 
+  //This is necessary for shadps4 server same ip connections
+  if (coopServerIpOption == SHADPS4_COOP_URL) {
+    Context.Log("Setting env vars for Shadps4CoopServer...")
+    System.Environment.SetEnvironmentVariable("SHADPS4_FORCE_RELAY", "1");
+    System.Environment.SetEnvironmentVariable("SHADPS4_P2P_PORT", "140" + Context.PlayerID);
+    Context.Log("PORT " + "140" + Context.PlayerID);
+  }
+
+  //Run the servers and register the clients
+  if (statsServerIpOption == LOCAL_IP && Context.PlayerID == 0) setupStatsShadnetServer();
+
+  //Set up coop server
+  if (coopServerIpOption == LOCAL_IP) setupCoopShadnetServer();
 
   var handlerBbportFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
   //Setting up settings.json first
-  setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption);
+  setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, coopServerIpOption);
 
   var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
   //Setting up bbport.ini
   setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption);
 
+  Game.LauncherExe = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
   Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
 };
