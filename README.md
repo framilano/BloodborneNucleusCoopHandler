@@ -1,8 +1,6 @@
 # Bloodborne Nucleus Co-op Handler
 Bloodborne handlers for [shadPS4](https://github.com/shadps4-emu/shadps4), [bbhost](https://github.com/droogie/bbhost) and [bbport](https://github.com/Supermedo/bloodborne_pc). 
 
-The last version for shadPS4 is 0.7, releases after that one will focus on Bloodborne translation layers like bbhost and bbport, these versions have better performances so it makes more sense to work on them.
-
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
 
 ## Table of contents
@@ -88,13 +86,15 @@ Bloodborne servers emulation currently requires two components:
 To have a full offline experience we need to run both these servers together, this is possible thanks to these two open source projects:
 1. The [NoDreamForHunter](https://github.com/fhody125-web/NoDreamForHunter/) from fhody125-web gives us an offline stats server, this is not the same as [nodreamforthehunter](https://nodreamforthehunter.com/)
 2. The [Shadnet-P2P](https://github.com/Wozzardman/shadnet-p2p) from Wozzardman gives us an offline shadnet server that supports co-op and summonings.
+3. The[ Seamless Coop mod](https://github.com/Classmg22/BBSC) by Classmg22, give us both coop and stats server to run locally
 
 ## How to install
-1. Download handler version 0.7 [release](https://github.com/framilano/BloodborneNucleusCoopHandler/releases/tag/0.7) and unzip it
-2. Copy the content of the extracted folder to `<YOUR_NUCLEUS_INSTALLATION>/handlers`, both the `Bloodborne` folder and `Bloodborne.js`
-3. If you want to play with **Wozzardman** fork of the coop server, download the latest released `shadPS4.exe` from Wozzardman [shadp2p repository](https://github.com/Wozzardman/shadp2p/releases).
-4. If you want to play using the **NoDreamForTheHunter** version, download the latest release `shadps4.exe` from their [site](https://nodreamforthehunter.com/howtoplay) and rename it to `shadPS4.exe`
-5. Select the executable you downloaded from Nucleus Co-op UI, as soon as you select it the Bloodborne handler should appear
+1. Download and extract the latest `shadPS4Handler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
+2. Copy the content of the extracted folder to `<YOUR_NUCLEUS_INSTALLATION>/handlers`, both the `Bloodborne-shadPS4` folder and `Bloodborne-shadPS4.js`
+  * 2a) If you want to play with **Wozzardman** fork of the coop server, download the latest released `shadPS4.exe` from Wozzardman [shadp2p repository](https://github.com/Wozzardman/shadp2p/releases).
+  * 2b) If you want to play using the **NoDreamForTheHunter** version, download the latest release `shadps4.exe` from their [site](https://nodreamforthehunter.com/howtoplay) and rename it to `shadPS4.exe`
+  * 2c) If you want to play with BBSC seamless coop, download the latest Nucleus release from [BBSC repository](https://github.com/Classmg22/BBSC)
+3. Select the `shadPS4.exe` **(it must have the mods folder near the it!)** you downloaded using Nucleus Co-op UI, as soon as you select it the Bloodborne handler should appear
     <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
