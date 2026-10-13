@@ -5,8 +5,8 @@ Hub.Maintainer.Id = "va6S2wcYCxth3FSgZ";
 
 const LOCAL_IP = "127.0.0.1";
 const SHADPS4_STATS_URL = "thehuntersdream.com";
-const SHADNET_STATS_FORK = "fhody125-stats-server";
-const SHADNET_COOP_FORK = "wozzardman-coop-server";
+const SHADNET_STATS_FORK = "clsamg22-stats-coop-server";
+const SHADNET_COOP_FORK = "clsamg22-stats-coop-server";
 
 //#################### Handler Options ####################
 
@@ -106,7 +106,7 @@ Game.Description =
   "Instructions:\n" + 
   "The only required step is selecting the Bloodborne.exe executable.";
 Game.ForceProcessSearch = true;
-Game.KillProcessesOnClose = [ "NoDreamForTheHunter", "shadnet" ];
+Game.KillProcessesOnClose = [ "BBSC-GameServer", "shadnet" ];
 
 //#################### ProtoInput ####################
 
@@ -174,7 +174,6 @@ Game.Hook.XInputEnabled = false;
 Game.Hook.XInputReroute = false;
 Game.Hook.CustomDllEnabled = false;
 
-Game.ProtoInput.AutoHideTaskbar = true;
 Game.ProtoInput.OnInputLocked = function() {    
   for (var i = 0; i < PlayerList.Count; i++)    {        
     var player = PlayerList[i];
@@ -227,20 +226,18 @@ Game.ProtoInput.OnInputUnlocked = function(){
   }
 }
 
-/**
+/*
  * Setting up stats shadnet server
  */
 function setupStatsShadnetServer() {
-  Context.Log("[START setupStatsShadnetServer]");
+  Handler.Log("[START setupStatsShadnetServer]");
 
-  var executable = "";
-  var arguments = "";
-  executable = "NoDreamForHunter.exe";
-
+  var executable = "BBSC-GameServer.exe";
+  var arguments = "--shadnet 127.0.0.1 --host 127.0.0.1";
   var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_STATS_FORK, executable);
   Context.StartProcess(handlerStatsExecutableFilePath, arguments, false);
 
-  Context.Log("[STOP setupStatsShadnetServer]");
+  Handler.Log("[STOP setupStatsShadnetServer]");
 }
 
 /**
