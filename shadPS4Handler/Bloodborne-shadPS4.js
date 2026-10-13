@@ -75,7 +75,7 @@ Game.MaxPlayers = 4;
 //#################### File System ####################
 
 Game.SymlinkGame = true;
-Game.HardlinkGame = true;
+Game.HardlinkGame = false;
 Game.RunLauncherAndExe = false;
 Game.ExecutableNames = ["shadPS4.exe"]
 
@@ -175,9 +175,6 @@ Game.Hook.DInputForceDisable = false;
 Game.Hook.XInputEnabled = false;
 Game.Hook.XInputReroute = false;
 Game.Hook.CustomDllEnabled = false;
-
-//Game.ProtoInput.AutoHideTaskbar = true;
-
 
 /**
  * Set patches copying Bloodborne.xml original file to BloodborneHandler.xml and then edit BloodborneHandler.xml enabling the selected patches.

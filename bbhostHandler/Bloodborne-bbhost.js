@@ -36,7 +36,7 @@ Game.MaxPlayers = 4;
 //#################### File System ####################
 
 Game.SymlinkGame = true;
-Game.HardlinkGame = true;
+Game.HardlinkGame = false;
 Game.RunLauncherAndExe = false;
 Game.ExecutableNames = ["bbhost.exe"]
 
