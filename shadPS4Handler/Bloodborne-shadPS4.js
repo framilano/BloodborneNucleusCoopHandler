@@ -19,13 +19,22 @@ Game.AddOption("Render Resolution",
   resolutionOptions
 );
 
+//Ask for the render resolution used by all instances
+var framerateOptions = ["30", "60", "90"];
+Game.AddOption(
+  "Framerate Cap", 
+  "Enter your desired framerate for all instances", 
+  "framerateOption", 
+  framerateOptions
+);
+
+
 //Stats Server IP option
 Game.AddOption(
   "Stats Server IP",
   "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a stats server,\n" +
-  "- thehuntersdream.com, will connect you to the shadPS4 team hosted server,\n" +
-  "- " + NODREAMFORTHEHUNTER_URL + ", will connect you to NoDreamForTheHunter",
+  "- 127.0.0.1, will run locally a stats server,\n" +
+  "- thehuntersdream.com, will connect you to the shadPS4 team hosted server",
   "statsServerIpOption", []
 );
 
@@ -33,60 +42,63 @@ Game.AddOption(
 Game.AddOption(
   "Co-op Server IP",
   "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a stats server,\n" + 
-  "- " + NODREAMFORTHEHUNTER_URL + ", will connect you to NoDreamForTheHunter (it requires you to register a player for each instance)",
+  "- 127.0.0.1, will run locally a coop server",
   "coopServerIpOption", 
   []
 );
 
-//Ask if we should enabled the Wozzardman seamless support
+//Ask if we should enable seamless support
 var seamlessOptions = ["Yes", "No"];
 Game.AddOption(
-  "Experimental Seamless Support", 
-  "Shall we enable Experimental Seamless support? (Only makes sense if you selected a co-op server option that supports this feature)", 
+  "Seamless Support", 
+  "Shall we enable Classmg22 Seamless support? (Only makes sense if you selected a co-op server option that supports this feature)", 
   "seamlessOption", 
   seamlessOptions
 );
 
 //Ask for credentials for each instance
-Game.AddOption("Player 0 Custom Server Username", "Enter your Player0 username for the online custom server. You can leave these credentials blank if using a local co-op server, meanwhile you must insert them to connect to online servers like NoDreamForTheHunter", "customServerPlayer0HunterUsername", []);
-Game.AddOption("Player 0 Custom Server Password", "Enter your Player0 password for the online custom server", "customServerPlayer0HunterPassword", []);
-Game.AddOption("Player 1 Custom Server Username", "Enter your Player1 username for the online custom server", "customServerPlayer1HunterUsername", []);
-Game.AddOption("Player 1 Custom Server Password", "Enter your Player1 password for the online custom server", "customServerPlayer1HunterPassword", []);
-Game.AddOption("Player 2 Custom Server Username", "Enter your Player2 username for the online custom server", "customServerPlayer2HunterUsername", []);
-Game.AddOption("Player 2 Custom Server Password", "Enter your Player2 password for the online custom server", "customServerPlayer2HunterPassword", []);
+Game.AddOption("Player 0 Custom Server Username", "Enter your Player0 username for the online custom server.\n(empty if using 127.0.0.1 coop server)", "customServerPlayer0HunterUsername", []);
+Game.AddOption("Player 0 Custom Server Password", "Enter your Player0 password for the online custom server.\n(empty if using 127.0.0.1 coop server)", "customServerPlayer0HunterPassword", []);
+Game.AddOption("Player 1 Custom Server Username", "Enter your Player1 username for the online custom server.\n(empty if using 127.0.0.1 coop server)", "customServerPlayer1HunterUsername", []);
+Game.AddOption("Player 1 Custom Server Password", "Enter your Player1 password for the online custom server.\n(empty if using 127.0.0.1 coop server)", "customServerPlayer1HunterPassword", []);
+Game.AddOption("Player 2 Custom Server Username", "Enter your Player2 username for the online custom server.\n(empty if using 127.0.0.1 coop server)", "customServerPlayer2HunterUsername", []);
+Game.AddOption("Player 2 Custom Server Password", "Enter your Player2 password for the online custom server.\n(empty if using 127.0.0.1 coop server)", "customServerPlayer2HunterPassword", []);
 
-Game.ExecutableContext = [];
-Game.DirExclusions = [];
-Game.KillProcessesOnClose = ["shadnet", "NoDreamForHunter", "BBSC-GameServer"]; //Automatically closes this list of processes (names of the executables)
-Game.DirSymlinkExclusions = [];
-Game.FileSymlinkExclusions = [];
-Game.FileSymlinkCopyInstead = [];
-Game.GameName = "Bloodborne-shadPS4";
-Game.HandlerInterval = 100;
-Game.SymlinkExe = false;
-Game.SymlinkGame = true;
-Game.SymlinkFolders = false;
+//#################### Game Info ####################
+
 Game.ExecutableName = "shadPS4.exe";
 Game.GUID = "Bloodborne-shadPS4";
-Game.MaxPlayers = 4;
+Game.GameName = "Bloodborne-shadPS4";
 Game.MaxPlayersOneMonitor = 4;
+Game.MaxPlayers = 4;
+
+//#################### File System ####################
+
+Game.SymlinkGame = true;
+Game.HardlinkGame = true;
+Game.RunLauncherAndExe = false;
+Game.ExecutableNames = ["shadPS4.exe"]
+
+//#################### Nucleus Co-op Environment ####################
+
 Game.UseNucleusEnvironment = true;
-Game.Hook.ForceFocus = true;
-Game.Hook.ForceFocusWindowName = "shadPS4";
+Game.UserProfileSavePath = "AppData\\Roaming\\shadPS4";
+
+//#################### Focus ####################
+
 Game.HasDynamicWindowTitle = true;
 Game.RefreshWindowAfterStart = true;
 Game.ResetWindows = true;
 Game.SetForegroundWindowElsewhere = true;
-Game.Hook.DInputEnabled = false;
-Game.Hook.XInputEnabled = false;
-Game.Hook.XInputReroute = false;
-Game.Hook.CustomDllEnabled = false;
-Game.BlockRawInput = false;
-Game.UserProfileSavePath = "AppData\\Roaming\\shadPS4";
-Game.UserProfileConfigPath = "";
-Game.UserProfileSavePathNoCopy = true;
-Game.UserProfileConfigPathNoCopy = true;
+Game.Hook.ForceFocus = true;
+Game.Hook.ForceFocusWindowName = "shadPS4";
+Game.ForceProcessPick = false;
+
+//#################### Extra ####################
+
+Game.PauseBetweenContextAndLaunch = 0;
+Game.PauseBetweenProcessGrab = 0;
+Game.PauseBetweenStarts = 0;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on shadnet emulation of stats and coop servers, with support for both local and online ones.\n\n" +
   "Required files:\n" +
@@ -95,11 +107,13 @@ Game.Description =
   "The only required step is selecting the shadPS4.exe executable, depending if it's the official one or a fork.\n\n" + 
   "A bunch of performances patches are enabled by default, you can disable them by editing *Bloodborne.xml* contained in this handler *patches* folder.\n" + 
   "This handler is also available on Linux thanks to PartyDeck.";
-Game.PauseBetweenContextAndLaunch = 0;
-Game.PauseBetweenProcessGrab = 0;
-Game.PauseBetweenStarts = 5;
+Game.ForceProcessSearch = false;
+Game.KillProcessesOnClose = ["shadnet", "BBSC-GameServer"];
 
-// OUTDATED OPTIONS, DISABLED TO AVOID CONFLICTS
+//#################### ProtoInput ####################
+
+Game.SupportsMultipleKeyboardsAndMice = true;
+// Deprecated options
 Game.HookSetCursorPos = false;
 Game.HookGetCursorPos = false;
 Game.HookGetKeyState = false;
@@ -110,69 +124,65 @@ Game.HookFilterMouseMessages = false;
 Game.HookUseLegacyInput = false;
 Game.HookDontUpdateLegacyInMouseMsg = false;
 Game.HookMouseVisibility = false;
-
 Game.SendNormalMouseInput = false;
 Game.SendNormalKeyboardInput = false;
 Game.SendScrollWheel = false;
 Game.ForwardRawKeyboardInput = false;
 Game.ForwardRawMouseInput = false;
-Game.HookReRegisterRawInput = false;
-Game.HookReRegisterRawInputMouse = false;
-Game.HookReRegisterRawInputKeyboard = false;
 Game.DrawFakeMouseCursor = false;
-
-// REQUIRED FOR MICE/KEYS
-Game.SupportsMultipleKeyboardsAndMice = true;
-Game.ProtoInput.XinputHook = true;
-Game.ProtoInput.UseDinputRedirection = false;
-Game.ProtoInput.DinputDeviceHook = false;
-Game.ProtoInput.DinputHookAlsoHooksGetDeviceState = false;
-Game.ProtoInput.UseOpenXinput = true;
-Game.ProtoInput.InjectStartup = true;
+Game.LockInputAtStart = false;
+Game.LockInputSuspendsExplorer = true;
+Game.ProtoInput.FreezeExternalInputWhenInputNotLocked = true;
+Game.LockInputToggleKey = 0x23;
+Game.ProtoInput.InjectStartup = false;
 Game.ProtoInput.InjectRuntime_RemoteLoadMethod = false;
-Game.ProtoInput.InjectRuntime_EasyHookMethod = false;
+Game.ProtoInput.InjectRuntime_EasyHookMethod = true;
 Game.ProtoInput.InjectRuntime_EasyHookStealthMethod = false;
+// This hook should always be on, regardless of input lock
 Game.ProtoInput.RegisterRawInputHook = true;
-Game.ProtoInput.GetRawInputDataHook = false;
+// This can always be enabled, since we are going to allow/disallow raw input with the bypass function
+Game.ProtoInput.GetRawInputDataHook = true;
+// We will be installing/uninstalling the filters manually so there's no need to
 Game.ProtoInput.MessageFilterHook = true;
-Game.ProtoInput.GetCursorPosHook = true;
-Game.ProtoInput.SetCursorPosHook = true;
-Game.ProtoInput.GetKeyStateHook = false;
-Game.ProtoInput.GetAsyncKeyStateHook = false;
-Game.ProtoInput.GetKeyboardStateHook = false;
-Game.ProtoInput.CursorVisibilityHook = false;
 Game.ProtoInput.ClipCursorHook = true;
 Game.ProtoInput.FocusHooks = true;
-Game.ProtoInput.DrawFakeCursor = false;
-Game.ProtoInput.RawInputFilter = true;
-Game.ProtoInput.MouseMoveFilter = false;
-Game.ProtoInput.MouseActivateFilter = false;
-Game.ProtoInput.WindowActivateFilter = true;
-Game.ProtoInput.WindowActvateAppFilter = false;
-Game.ProtoInput.MouseWheelFilter = true;
-Game.ProtoInput.MouseButtonFilter = true;
-Game.ProtoInput.KeyboardButtonFilter = true;
+// These aren't problematic to leave on, since the external "freeze fake input input" when real input ISN'T locked will prevent these from interfering
 Game.ProtoInput.SendMouseWheelMessages = true;
 Game.ProtoInput.SendMouseButtonMessages = true;
 Game.ProtoInput.SendMouseMovementMessages = true;
 Game.ProtoInput.SendKeyboardButtonMessages = true;
+// Handled on input lock/unlock, don't enable this by default
 Game.ProtoInput.EnableFocusMessageLoop = false;
-Game.ProtoInput.FocusLoopIntervalMilliseconds = 1000;
-Game.ProtoInput.FocusLoop_WM_ACTIVATE = false;
-Game.ProtoInput.FocusLoop_WM_ACTIVATEAPP = false;
-Game.ProtoInput.FocusLoop_WM_NCACTIVATE = false;
-Game.ProtoInput.FocusLoop_WM_SETFOCUS = false;
-Game.ProtoInput.FocusLoop_WM_MOUSEACTIVATE = false;
-Game.ProtoInput.BlockedMessages = [0x0008, 0x0006];
+//Game.ProtoInput.FocusLoopIntervalMilliseconds = 5;
+//Game.ProtoInput.FocusLoop_WM_ACTIVATE = true;
+//Game.ProtoInput.FocusLoop_WM_ACTIVATEAPP = true;
+//Game.ProtoInput.FocusLoop_WM_NCACTIVATE = true;
+//Game.ProtoInput.FocusLoop_WM_SETFOCUS = true;
+//Game.ProtoInput.FocusLoop_WM_MOUSEACTIVATE = true;
+Game.ProtoInput.DrawFakeCursor = false; // This is set in the input locking
+Game.ProtoInput.BlockedMessages = [ 0x0008 ]; // Blocks WM_KILLFOCUS
 Game.ProtoInput.RenameHandlesHook = false;
-Game.ProtoInput.RenameHandles = [];
-Game.ProtoInput.RenameNamedPipes = [];
-Game.LockInputAtStart = false;
+Game.ProtoInput.RenameHandles = []
+;Game.ProtoInput.RenameNamedPipes = [];
+// We can leave these on and not worry about input lock. 
+// It doesn't matter if controller input still works since it won't get in the way
+Game.ProtoInput.XinputHook = true;
+Game.ProtoInput.UseOpenXinput = true;
+Game.ProtoInput.UseDinputRedirection = false;
+// The old Nucleus options. Don't use these with the Xinput hook
+Game.Hook.DInputEnabled = false;
+Game.Hook.DInputForceDisable = false;
+Game.Hook.XInputEnabled = false;
+Game.Hook.XInputReroute = false;
+Game.Hook.CustomDllEnabled = false;
+
+Game.ProtoInput.AutoHideTaskbar = true;
+
 
 /**
  * Set patches copying Bloodborne.xml original file to BloodborneHandler.xml and then edit BloodborneHandler.xml enabling the selected patches.
  */
-function setupPatches(handlerBloodbornePatchesFilePath, resolutionOption) {
+function setupPatches(handlerBloodbornePatchesFilePath, resolutionOption, framerateOption) {
   Handler.Log("[INFO setupPatches] resolutionOption: " + resolutionOption);
   //Copying untouched patches file to the used one
   var handlerBloodborneOriginalPatchesFilePath = System.IO.Path.Combine(Game.Folder, "patches\\Bloodborne.xml");
@@ -203,19 +213,19 @@ function setupPatches(handlerBloodbornePatchesFilePath, resolutionOption) {
   Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ patchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
   patchLineNumber = Context.FindLineNumberInTextFile(handlerBloodbornePatchesFilePath, "Lower object/corpse physics", Nucleus.SearchType.Contains); 
   Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ patchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
-  patchLineNumber = Context.FindLineNumberInTextFile(handlerBloodbornePatchesFilePath, "30 FPS++", Nucleus.SearchType.Contains); 
-  Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ patchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
+
   patchLineNumber = Context.FindLineNumberInTextFile(handlerBloodbornePatchesFilePath, "lower specific renders (Perf Increase)", Nucleus.SearchType.Contains); 
   Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ patchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
   
   //Setting resolution patch using user option
-  if (resolutionOption == resolutionOptions[0]) {
-    Handler.Log("[STOP setupPatches] No resolution patch selected then!");
-    return;
+  if (resolutionOption != resolutionOptions[0]) {
+    var resolutionPatchLineNumber = Context.FindLineNumberInTextFile(handlerBloodbornePatchesFilePath, resolutionOption, Nucleus.SearchType.Contains); 
+    Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ resolutionPatchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
   }
-  var resolutionPatchLineNumber = Context.FindLineNumberInTextFile(handlerBloodbornePatchesFilePath, resolutionOption, Nucleus.SearchType.Contains); 
-  Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ resolutionPatchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
 
+  //Setting framerate patch
+  patchLineNumber = Context.FindLineNumberInTextFile(handlerBloodbornePatchesFilePath, framerateOption + " FPS++", Nucleus.SearchType.Contains); 
+  Context.ReplacePartialLinesInTextFile(handlerBloodbornePatchesFilePath, [ patchLineNumber + '|isEnabled="false"|isEnabled="true"' ]);
 }
 
 /**
@@ -224,14 +234,8 @@ function setupPatches(handlerBloodbornePatchesFilePath, resolutionOption) {
 function setupStatsShadnetServer() {
   Handler.Log("[START setupStatsShadnetServer]");
 
-  var executable = "";
-  var arguments = "";
-  if (SHADNET_STATS_FORK == "clsamg22-stats-coop-server") {
-    executable = "BBSC-GameServer.exe";
-    arguments = "--shadnet 127.0.0.1";
-  } else {
-    executable = "NoDreamForHunter.exe";
-  }
+  var executable = "BBSC-GameServer.exe";
+  var arguments = "--shadnet 127.0.0.1 --host 127.0.0.1";
   var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_STATS_FORK, executable);
   Context.StartProcess(handlerStatsExecutableFilePath, arguments, false);
 
@@ -246,7 +250,7 @@ function setupCoopShadnetServer(seamlessOption) {
 
   //Server setup only during first instance launch  
   if (Context.PlayerID == 0) {
-    //Enabling experimental Seamless if requested by the user
+    //Enabling Seamless if requested by the user
     var handlerShadnetConfigFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_COOP_FORK, "shadnet.cfg");
     var seamlessLineNumber = Context.FindLineNumberInTextFile(handlerShadnetConfigFilePath, 'BloodborneSeamlessCoop', Nucleus.SearchType.Contains); 
     if (seamlessOption == "Yes") var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=true', ]; 
@@ -337,14 +341,11 @@ function setupBloodborneCustomConfig(instanceUserFolderPath, titleId, coopServer
   Handler.Log("[STOP setupBloodborneCustomConfig]");
 }
 
-function setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath, coopServerIpOption) {
+function setupPatchesAndLaunchArgs(resolutionOption, framerateOption, bloodborneFolderPath, coopServerIpOption) {
   Handler.Log("[START setupPatchesAndLaunchArgs]")
   var handlerBloodbornePatchesFilePath = System.IO.Path.Combine(Game.Folder, "patches\\BloodborneHandler.xml");
-  if (Context.PlayerID == 0) { setupPatches(handlerBloodbornePatchesFilePath, resolutionOption); }   //Replace Bloodborne.xml and edit it only with the first instance, we don't need to do this more than once
+  if (Context.PlayerID == 0) { setupPatches(handlerBloodbornePatchesFilePath, resolutionOption, framerateOption); }   //Replace Bloodborne.xml and edit it only with the first instance, we don't need to do this more than once
   var ebootBinFilePath =  System.IO.Path.Combine(bloodborneFolderPath, "eboot.bin");
-  //This env var if server and client support seamless coop
-  if (seamlessOption == seamlessOptions[0])   System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "1");
-  else System.Environment.SetEnvironmentVariable("SHADPS4_BLOODBORNE_SEAMLESS_COOP", "0");
   
   //This is necessary for nodreamforhunters same ip connections
   if (coopServerIpOption == NODREAMFORTHEHUNTER_URL) {
@@ -361,6 +362,7 @@ Game.Play = function() {
   //User answers
   var bloodborneFolderPath = Context.Options["bloodborneFolderPath"].trim();
   var resolutionOption = Context.Options["resolutionOption"].trim();
+  var framerateOption = Context.Options["framerateOption"].trim();
   var seamlessOption = Context.Options["seamlessOption"].trim();
   var statsServerIpOption = Context.Options["statsServerIpOption"].trim();
   var coopServerIpOption = Context.Options["coopServerIpOption"].trim();
@@ -373,7 +375,7 @@ Game.Play = function() {
   Handler.Log(titleId);
 
   //Load patches from Bloodborne.xml in handler folder and configure env variables
-  setupPatchesAndLaunchArgs(resolutionOption, seamlessOption, bloodborneFolderPath, coopServerIpOption);
+  setupPatchesAndLaunchArgs(resolutionOption, framerateOption, bloodborneFolderPath, coopServerIpOption);
 
   //Creating instance user folder
   var instanceUserFolderPath =  System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
