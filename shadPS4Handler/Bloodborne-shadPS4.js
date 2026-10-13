@@ -176,7 +176,7 @@ Game.Hook.XInputEnabled = false;
 Game.Hook.XInputReroute = false;
 Game.Hook.CustomDllEnabled = false;
 
-Game.ProtoInput.AutoHideTaskbar = true;
+//Game.ProtoInput.AutoHideTaskbar = true;
 
 
 /**

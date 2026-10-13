@@ -135,8 +135,6 @@ Game.Hook.XInputEnabled = false;
 Game.Hook.XInputReroute = false;
 Game.Hook.CustomDllEnabled = false;
 
-Game.ProtoInput.AutoHideTaskbar = true;
-
 /**
  * Setting bbhost-options.toml file
  * Unused because I can't fix this ghost file that tricks System.IO.File.Exists
