@@ -56,6 +56,15 @@ Game.AddOption("Desidered Upscaling Technology",
   upscalingOptions
 );
 
+//Ask if we should enable seamless support
+var seamlessOptions = ["Yes", "No"];
+Game.AddOption(
+  "Seamless Support", 
+  "Shall we enable Classmg22 Seamless support? (Only makes sense if you selected a co-op server option that supports this feature)", 
+  "seamlessOption", 
+  seamlessOptions
+);
+
 //Ask for credentials for each instance
 Game.AddOption("Player 0 Shadnet Username", "Enter your Player0 username for shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer0HunterUsername", []);
 Game.AddOption("Player 0 Shadnet Password", "Enter your Player0 password shadnet (empty if using 127.0.0.1 coop server)", "shadnetPlayer0HunterPassword", []);
@@ -76,8 +85,7 @@ Game.MaxPlayers = 4;
 
 //#################### File System ####################
 
-Game.SymlinkGame = true;
-Game.HardlinkGame = true;
+Game.HardcopyGame = true;
 Game.RunLauncherAndExe = false;
 Game.ExecutableNames = ["Bloodborne.exe", "bb-probe.exe", "Play Bloodborne.exe"]
 
@@ -244,7 +252,7 @@ function setupStatsShadnetServer() {
  * Setting up shadnet server and register clients manually
  */
 function setupCoopShadnetServer() {
-  Context.Log("[START setupCoopShadnetServer]");
+  Handler.Log("[START setupCoopShadnetServer]");
 
   //Server setup only during first instance launch  
   if (Context.PlayerID == 0) {
@@ -257,14 +265,14 @@ function setupCoopShadnetServer() {
   //Register Hunter on the server for each instance
   var handlerShadnetSampleExecutableFilePath = System.IO.Path.Combine(Game.Folder,  "shadnet", SHADNET_COOP_FORK, "shadnet-sample.exe");
   Context.StartProcess(handlerShadnetSampleExecutableFilePath, "127.0.0.1 31313 register Hunter" + Context.PlayerID + " 12345 hunter" + Context.PlayerID + "@placeholder.com NucleusCoopBloodborneHandler", false)
-  Context.Log("[STOP setupCoopShadnetServer]");
+  Handler.Log("[STOP setupCoopShadnetServer]");
 }
 
 /**
  * Editing settings.json
  */
 function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption) {
-  Context.Log("[START setupBbPortSettingsConfig]");
+  Handler.Log("[START setupBbPortSettingsConfig]");
 
   var handlerBbportSettingsFilePath = System.IO.Path.Combine(Game.Folder, "config\\settings.json");
   var instanceBbportSettingsFilePath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "settings.json");
@@ -273,13 +281,13 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
 
   //Creating user folder if it doesn't exist
   if (!System.IO.Directory.Exists(instanceBbportUserFolderPath)) {
-    Context.Log("Created user directory in " + instanceBbportUserFolderPath);
+    Handler.Log("Created user directory in " + instanceBbportUserFolderPath);
     System.IO.Directory.CreateDirectory(instanceBbportUserFolderPath);
   }
 
   //If the file doesn't exist, we create it first
   if (!System.IO.File.Exists(instanceBbportSettingsFilePath)) {
-    Context.Log("Created settings.json in " + instanceBbportSettingsFilePath);
+    Handler.Log("Created settings.json in " + instanceBbportSettingsFilePath);
     System.IO.Directory.CreateDirectory(handlerBbportFolderPath);
     System.IO.File.Copy(handlerBbportSettingsFilePath, instanceBbportSettingsFilePath, true);
   }
@@ -299,31 +307,31 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
   var hunterPassword = coopServerIpOption == LOCAL_IP ? "12345" : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
 
   var dict = [ 
-    gameDirLineNumber + '|  "game_dir": "' + bloodborneFolderPath.replace(/\\/g, "/") + '",',
+    gameDirLineNumber + "|  \"game_dir\": \"" + bloodborneFolderPath.replace(/\\/g, "/") + "\"" + (gameDirLineNumber != 38 ? "," : ""),
     userDirLineNumber + '|  "user_dir": "' + instanceBbportUserFolderPath.replace(/\\/g, "/") +'",',
     fpsModeLineNumber + '|  "fps_mode": "'+ framerateOption +'",',
     shadnetUsernameLineNumber + '|  "online_npid": "' + hunterUsername +'",',
     shadnetPasswordLineNumber + '|  "online_password": "' + hunterPassword +'",',
     shadnetCoopServerLineNumber + '|  "online_server": "' + coopServerIpOption +':31313",',
-    shadnetStatsServerLineNumber + '|  "online_community": "' + statsServerUrl + '"'
+    shadnetStatsServerLineNumber + '|  "online_community": "' + statsServerUrl + '",'
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceBbportSettingsFilePath, dict);
-  Context.Log("[STOP setupBbPortSettingsConfig]");
+  Handler.Log("[STOP setupBbPortSettingsConfig]");
 }
 
 /**
  * Editing content instance bbport.ini
  */
 function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption) {
-  Context.Log("[START setupBbPortIniConfig]");
+  Handler.Log("[START setupBbPortIniConfig]");
 
   var handlerBbPortInitFilePath = System.IO.Path.Combine(Game.Folder, "config\\bbport.ini");
   var instanceBbPortInitFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "bbport.ini");
 
   //Creating bbport.ini
   if (!System.IO.File.Exists(instanceBbPortInitFilePath)) {
-    Context.Log("Created bbport.ini in " + instanceBbPortInitFilePath);
+    Handler.Log("Created bbport.ini in " + instanceBbPortInitFilePath);
     System.IO.File.Copy(handlerBbPortInitFilePath, instanceBbPortInitFilePath, true);
   }
 
@@ -336,7 +344,53 @@ function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption,
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceBbPortInitFilePath, dict);
-  Context.Log("[STOP setupBbPortIniConfig]");
+  Handler.Log("[STOP setupBbPortIniConfig]");
+}
+
+/**
+ * Replacing bbport files with bbsc for Seamless Coop
+ */
+function setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath) {
+  Handler.Log("[START setupSeamlessCoop]");
+
+  var handlerBbscFolderPath = System.IO.Path.Combine(Game.Folder, "bbsc-files");
+  
+  //Copying BBSC files to instance bbport folder
+  var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
+  Context.CopyFolder(handlerBbscFolderPath, instanceBbPortContentFolderPath);
+
+  //Editing BBSC ps1 to point to the coop ip option
+  var playBbportPs1FilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "play-bbport.ps1");
+  var hostnameLineNumber = Context.FindLineNumberInTextFile(playBbportPs1FilePath, '$hostname = ', Nucleus.SearchType.Contains); 
+  var dict = [ 
+    hostnameLineNumber + '|$hostname = \'' + coopServerIpOption +'\'',
+  ]; 
+  Context.ReplaceLinesInTextFile(playBbportPs1FilePath, dict);
+
+  //Editing BBSC Seamless Card
+  var bbscCardFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "BBSC-card-SeamlessBloodborne.json");
+  var shadnetLineNumber = Context.FindLineNumberInTextFile(bbscCardFilePath, '  "shadnet": ', Nucleus.SearchType.Contains); 
+  var dict = [ 
+    shadnetLineNumber + '|  "shadnet": "' + coopServerIpOption + ':31313",',
+  ]; 
+  Context.ReplaceLinesInTextFile(bbscCardFilePath, dict);
+
+  //Editing bbport-paths.json
+  var bbscPathsFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "bbport-paths.json");
+  var bbportLineNumber = Context.FindLineNumberInTextFile(bbscPathsFilePath, 'bbport', Nucleus.SearchType.Contains); 
+  var ebootLineNumber = Context.FindLineNumberInTextFile(bbscPathsFilePath, 'eboot', Nucleus.SearchType.Contains); 
+
+  var bloodborneFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Bloodborne.exe");
+  var ebootFilePath = System.IO.Path.Combine(bloodborneFolderPath, "eboot.bin");
+
+  var dict = [ 
+    bbportLineNumber + '|    "bbport":  "' + bloodborneFilePath.replace(/\\/g, "\\\\") + '",',
+    ebootLineNumber + '|    "eboot":  "' + ebootFilePath.replace(/\\/g, "\\\\") + '"'
+  ]; 
+  Context.ReplaceLinesInTextFile(bbscPathsFilePath, dict);
+
+  
+  Handler.Log("[STOP setupSeamlessCoop]");
 }
 
 Game.Play = function() {
@@ -347,6 +401,7 @@ Game.Play = function() {
   var upscalingOption = Context.Options["upscalingOption"].split(" ")[0];
   var statsServerIpOption = Context.Options["statsServerIpOption"].trim();
   var coopServerIpOption = Context.Options["coopServerIpOption"].trim();
+  var seamlessOption = Context.Options["seamlessOption"].trim();
 
   //Run the servers and register the clients
   if (statsServerIpOption == LOCAL_IP && Context.PlayerID == 0) setupStatsShadnetServer();
@@ -359,9 +414,13 @@ Game.Play = function() {
   setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption);
 
   var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
+
   //Setting up bbport.ini
   setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption);
 
-  Game.LauncherExe = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
-  Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
+  //Paste bbsc files if seamless is enabled
+  if (seamlessOption == "Yes") setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath)
+
+  Game.LauncherExe = System.IO.Path.Combine(instanceBbPortContentFolderPath, "PLAY BBPORT + BBSC.cmd");
+  Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "PLAY BBPORT + BBSC.cmd");
 };
