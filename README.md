@@ -77,7 +77,10 @@ Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p) and [fhody125-
 - Enable the in-game music only on the first instance, so you won't have music echoing while playing
 - You can import your own save file on all instances and then register them on each profile, the save folder for each player is `C:\Users\<YOUR_USERNAME>\NucleusCoop\<PlayerX>\AppData\Roaming\bbport-launcher\user\savedata\1`. Launch the game after replacing the save files and the server will associate them with the shadnet user you're using. Remember that you can use the [Bloodborne save editor](https://github.com/Noxde/Bloodborne-save-editor) to setup your saves more quickly
 
-# shadPS4 
+# shadPS4
+## Showcase
+https://youtu.be/Jml26Eonlv0
+ 
 ## How does it work
 Bloodborne servers emulation currently requires two components:
 - **A stats server**, that handles user messages, ghosts and generic stats
