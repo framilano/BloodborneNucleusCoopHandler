@@ -354,10 +354,28 @@ function setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath) {
   Handler.Log("[START setupSeamlessCoop]");
 
   var handlerBbscFolderPath = System.IO.Path.Combine(Game.Folder, "bbsc-files");
+  var handlerBbscSplitscreenFolderPath = System.IO.Path.Combine(Game.Folder, "bbsc-splitscreen-files");
   
   //Copying BBSC files to instance bbport folder
   var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
   Context.CopyFolder(handlerBbscFolderPath, instanceBbPortContentFolderPath);
+
+
+  //Copying specific BBSC splitscreen files
+  var handlerBbscPathsFilePath = System.IO.Path.Combine(handlerBbscSplitscreenFolderPath, "bbport-paths.json")
+  var instanceBbscPathsFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "bbport-paths.json");
+  System.IO.File.Copy(handlerBbscPathsFilePath, instanceBbscPathsFilePath, true);
+  //Only if local, already use the handler account.dat with credentials
+  if (coopServerIpOption == LOCAL_IP) {
+      var handlerBbscAccountDatFilePath = System.IO.Path.Combine(handlerBbscSplitscreenFolderPath, "account.dat")
+      var instanceBbscAccountDatFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "account.dat");
+      System.IO.File.Copy(handlerBbscAccountDatFilePath, instanceBbscAccountDatFilePath, true);
+      var nameLineNumber = Context.FindLineNumberInTextFile(instanceBbscAccountDatFilePath, '"name":  ', Nucleus.SearchType.Contains); 
+      var dict = [ 
+        nameLineNumber + '|    "name":  "Hunter' + Context.PlayerID +'",',
+      ]; 
+      Context.ReplaceLinesInTextFile(instanceBbscAccountDatFilePath, dict);
+  }
 
   //Editing BBSC ps1 to point to the coop ip option
   var playBbportPs1FilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "play-bbport.ps1");
@@ -376,9 +394,8 @@ function setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath) {
   Context.ReplaceLinesInTextFile(bbscCardFilePath, dict);
 
   //Editing bbport-paths.json
-  var bbscPathsFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "bbport-paths.json");
-  var bbportLineNumber = Context.FindLineNumberInTextFile(bbscPathsFilePath, 'bbport', Nucleus.SearchType.Contains); 
-  var ebootLineNumber = Context.FindLineNumberInTextFile(bbscPathsFilePath, 'eboot', Nucleus.SearchType.Contains); 
+  var bbportLineNumber = Context.FindLineNumberInTextFile(instanceBbscPathsFilePath, 'bbport', Nucleus.SearchType.Contains); 
+  var ebootLineNumber = Context.FindLineNumberInTextFile(instanceBbscPathsFilePath, 'eboot', Nucleus.SearchType.Contains); 
 
   var bloodborneFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Bloodborne.exe");
   var ebootFilePath = System.IO.Path.Combine(bloodborneFolderPath, "eboot.bin");
@@ -387,7 +404,7 @@ function setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath) {
     bbportLineNumber + '|    "bbport":  "' + bloodborneFilePath.replace(/\\/g, "\\\\") + '",',
     ebootLineNumber + '|    "eboot":  "' + ebootFilePath.replace(/\\/g, "\\\\") + '"'
   ]; 
-  Context.ReplaceLinesInTextFile(bbscPathsFilePath, dict);
+  Context.ReplaceLinesInTextFile(instanceBbscPathsFilePath, dict);
 
   
   Handler.Log("[STOP setupSeamlessCoop]");
