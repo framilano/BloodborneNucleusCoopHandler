@@ -18,8 +18,7 @@ Game.AddOption(
   "Stats Server IP",
   "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
   "- 127.0.0.1, will setup locally a stats server,\n" +
-  "- thehuntersdream.com, will connect you to the shadPS4 team hosted stats server\n" + 
-  "- play.seamlesshunt.com, will play using BBSC stats server",
+  "- thehuntersdream.com, will connect you to the shadPS4 team hosted stats server",
   "statsServerIpOption", 
   []
 );
@@ -28,8 +27,7 @@ Game.AddOption(
 Game.AddOption(
   "Co-op Server IP",
   "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a coop server\n" + 
-  "- play.seamlesshunt.com, will play using BBSC coop server",
+  "- 127.0.0.1, will setup locally a stats server",
   "coopServerIpOption", 
   []
 );
@@ -367,17 +365,6 @@ function setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath) {
   var handlerBbscPathsFilePath = System.IO.Path.Combine(handlerBbscSplitscreenFolderPath, "bbport-paths.json")
   var instanceBbscPathsFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "bbport-paths.json");
   System.IO.File.Copy(handlerBbscPathsFilePath, instanceBbscPathsFilePath, true);
-  //Only if local, already use the handler account.dat with credentials
-  if (coopServerIpOption == LOCAL_IP) {
-      var handlerBbscAccountDatFilePath = System.IO.Path.Combine(handlerBbscSplitscreenFolderPath, "account.dat")
-      var instanceBbscAccountDatFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "account.dat");
-      System.IO.File.Copy(handlerBbscAccountDatFilePath, instanceBbscAccountDatFilePath, true);
-      var nameLineNumber = Context.FindLineNumberInTextFile(instanceBbscAccountDatFilePath, '"name":  ', Nucleus.SearchType.Contains); 
-      var dict = [ 
-        nameLineNumber + '|    "name":  "Hunter' + Context.PlayerID +'",',
-      ]; 
-      Context.ReplaceLinesInTextFile(instanceBbscAccountDatFilePath, dict);
-  }
 
   //Editing BBSC ps1 to point to the coop ip option
   var playBbportPs1FilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "play-bbport.ps1");
