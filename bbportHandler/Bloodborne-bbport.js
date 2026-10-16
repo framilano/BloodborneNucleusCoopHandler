@@ -18,7 +18,8 @@ Game.AddOption(
   "Stats Server IP",
   "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
   "- 127.0.0.1, will setup locally a stats server,\n" +
-  "- thehuntersdream.com, will connect you to the shadPS4 team hosted stats server",
+  "- thehuntersdream.com, will connect you to the shadPS4 team hosted stats server\n" + 
+  "- play.seamlesshunt.com, will play using BBSC stats server",
   "statsServerIpOption", 
   []
 );
@@ -27,7 +28,8 @@ Game.AddOption(
 Game.AddOption(
   "Co-op Server IP",
   "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a stats server",
+  "- 127.0.0.1, will setup locally a coop server\n" + 
+  "- play.seamlesshunt.com, will play using BBSC coop server",
   "coopServerIpOption", 
   []
 );
