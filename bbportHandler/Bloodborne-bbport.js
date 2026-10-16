@@ -27,7 +27,8 @@ Game.AddOption(
 Game.AddOption(
   "Co-op Server IP",
   "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a stats server",
+  "- 127.0.0.1, will setup locally a coop server\n" +
+  "- play.seamlesshunt.com, will connect to BBSC official coop server",
   "coopServerIpOption", 
   []
 );
