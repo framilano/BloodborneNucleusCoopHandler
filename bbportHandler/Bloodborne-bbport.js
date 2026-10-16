@@ -347,58 +347,6 @@ function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption,
   Handler.Log("[STOP setupBbPortIniConfig]");
 }
 
-/**
- * Replacing bbport files with bbsc for Seamless Coop
- */
-function setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath) {
-  Handler.Log("[START setupSeamlessCoop]");
-
-  var handlerBbscFolderPath = System.IO.Path.Combine(Game.Folder, "bbsc-files");
-  var handlerBbscSplitscreenFolderPath = System.IO.Path.Combine(Game.Folder, "bbsc-splitscreen-files");
-  
-  //Copying BBSC files to instance bbport folder
-  var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
-  Context.CopyFolder(handlerBbscFolderPath, instanceBbPortContentFolderPath);
-
-
-  //Copying specific BBSC splitscreen files
-  var handlerBbscPathsFilePath = System.IO.Path.Combine(handlerBbscSplitscreenFolderPath, "bbport-paths.json")
-  var instanceBbscPathsFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "bbport-paths.json");
-  System.IO.File.Copy(handlerBbscPathsFilePath, instanceBbscPathsFilePath, true);
-
-  //Editing BBSC ps1 to point to the coop ip option
-  var playBbportPs1FilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "play-bbport.ps1");
-  var hostnameLineNumber = Context.FindLineNumberInTextFile(playBbportPs1FilePath, '$hostname = ', Nucleus.SearchType.Contains); 
-  var dict = [ 
-    hostnameLineNumber + '|$hostname = \'' + coopServerIpOption +'\'',
-  ]; 
-  Context.ReplaceLinesInTextFile(playBbportPs1FilePath, dict);
-
-  //Editing BBSC Seamless Card
-  var bbscCardFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "tools", "BBSC-card-SeamlessBloodborne.json");
-  var shadnetLineNumber = Context.FindLineNumberInTextFile(bbscCardFilePath, '  "shadnet": ', Nucleus.SearchType.Contains); 
-  var dict = [ 
-    shadnetLineNumber + '|  "shadnet": "' + coopServerIpOption + ':31313",',
-  ]; 
-  Context.ReplaceLinesInTextFile(bbscCardFilePath, dict);
-
-  //Editing bbport-paths.json
-  var bbportLineNumber = Context.FindLineNumberInTextFile(instanceBbscPathsFilePath, 'bbport', Nucleus.SearchType.Contains); 
-  var ebootLineNumber = Context.FindLineNumberInTextFile(instanceBbscPathsFilePath, 'eboot', Nucleus.SearchType.Contains); 
-
-  var bloodborneFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Bloodborne.exe");
-  var ebootFilePath = System.IO.Path.Combine(bloodborneFolderPath, "eboot.bin");
-
-  var dict = [ 
-    bbportLineNumber + '|    "bbport":  "' + bloodborneFilePath.replace(/\\/g, "\\\\") + '",',
-    ebootLineNumber + '|    "eboot":  "' + ebootFilePath.replace(/\\/g, "\\\\") + '"'
-  ]; 
-  Context.ReplaceLinesInTextFile(instanceBbscPathsFilePath, dict);
-
-  
-  Handler.Log("[STOP setupSeamlessCoop]");
-}
-
 Game.Play = function() {
   //User answers
   var bloodborneFolderPath = Context.Options["bloodborneFolderPath"].trim().replace(/"/g, '');
@@ -425,8 +373,15 @@ Game.Play = function() {
   setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption);
 
   //Paste bbsc files if seamless is enabled
-  if (seamlessOption == "Yes") setupSeamlessCoop(coopServerIpOption, bloodborneFolderPath)
+  if (seamlessOption == "Yes") {
+    var handlerBbscFolderPath = System.IO.Path.Combine(Game.Folder, "bbsc-files");
+  
+    //Copying BBSC files to instance bbport folder
+    var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
+    Context.CopyFolder(handlerBbscFolderPath, instanceBbPortContentFolderPath);
+    System.Environment.SetEnvironmentVariable("BB_PROBE", "bbsc\\bbsc-launch.exe");
+    System.Environment.SetEnvironmentVariable("BBSC_EMULATOR", "emulator\\bb-probe.exe");
+  }
 
-  Game.LauncherExe = System.IO.Path.Combine(instanceBbPortContentFolderPath, "PLAY BBPORT + BBSC.cmd");
-  Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "PLAY BBPORT + BBSC.cmd");
+  Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
 };
