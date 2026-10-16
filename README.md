@@ -59,6 +59,7 @@ Uses bbhost official [server](https://thehuntersdream.com/) to connect two local
 Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p), [fhody125-web-fork](https://github.com/fhody125-web/NoDreamForHunter/) server forks to play coop **completely offline** and it supports BBSC seamless coop! It runs way better than shadPS4 and has more PC specific customizations too.
 
 ## How to install
+0. Please use a clean folder of [bbport fork](https://github.com/Supermedo/bloodborne_pc), do not reuse an existing installation, create a separate folder!
 1. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
 2. Move the downloaded files to the NucleusCoop `handlers` folder
 3. Select `Bloodborne.exe` from NucleusCoop GUI, 
