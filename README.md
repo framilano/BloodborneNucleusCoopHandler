@@ -75,6 +75,7 @@ Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p), [fhody125-web
 8. Done!
 
 ## Extra
+- Due to how BBSC works, if you first start this handler with a local setup and then setup an external server with credential you'll need to delete manually the account.dat file in all instances content folder, located here `C:\NucleusApp\content\Bloodborne-bbport\InstanceX\tools\account.dat`. Deleting it for each instance will make the handler ask you for the Seamless online credentials. You could backup `account.dat` for each instance when playing locally and create a separate backup when playing online. Account.dat files contain your credentials, of course they're known when playing locally (HunterX where X is the player number and password 12345), but I can't autogenerate the file when playing online due to the password encryption.
 - Enable the in-game music only on the first instance, so you won't have music echoing while playing
 - You can import your own save file on all instances and then register them on each profile, the save folder for each player is `C:\Users\<YOUR_USERNAME>\NucleusCoop\<PlayerX>\AppData\Roaming\bbport-launcher\user\savedata\1`. Launch the game after replacing the save files and the server will associate them with the shadnet user you're using. Remember that you can use the [Bloodborne save editor](https://github.com/Noxde/Bloodborne-save-editor) to setup your saves more quickly
 
