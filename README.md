@@ -53,10 +53,10 @@ Uses bbhost official [server](https://thehuntersdream.com/) to connect two local
 # bbport
 **This handler only works with this [bbport fork](https://github.com/Supermedo/bloodborne_pc)**
 
-**This handler is offline-only**
+**This handler works both completely offline and online**
 
 ## How does it work
-Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p) and [fhody125-web-fork](https://github.com/fhody125-web/NoDreamForHunter/) server forks to play coop **completely offline**! Online is not supported due to shadps4 server same IP limitations. It runs way better than shadPS4 and has more PC specific customizations too.
+Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p), [fhody125-web-fork](https://github.com/fhody125-web/NoDreamForHunter/) server forks to play coop **completely offline** and it supports BBSC seamless coop! It runs way better than shadPS4 and has more PC specific customizations too.
 
 ## How to install
 1. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
@@ -68,10 +68,11 @@ Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p) and [fhody125-
 1. Select your `CUSAXXXXX` folder where your Bloodborne games files are stored
 2. The handler will ask you which stats and server IPs to use, type `127.0.0.1` in both to let the handler start the servers autonomously.
 3. Enter your credentials, if using `127.0.0.1` as a coop server you must leave these fields blank, otherwise you must input both username and password for each player registered on the external coop server.
-4. When the handler starts the *Nucleus Coop Process Picker* will appear, you need to wait for the first instance of `Bloodborne.exe` to boot, click **Refresh** on the process picker and select process `bb-probe.exe`
-5. Repeat step 4 for each instance that starts automatically
-6. When all the windows are locked in positions correctly, press `End` key to lock input, all controllers should work at that point.
-7. Done!
+4. Seamless by Classmg is started automatically when selecting both stats and coop server with `127.0.0.1` and `Enable Seamless option` is also enabled. If using it locally the BBSC account will be handled automatically, if you're using it with `play.seamlesshunt.com` then you'll need to [create an account first](https://install.seamlesshunt.com/index.html) for each instance.
+5. When the handler starts the *Nucleus Coop Process Picker* will appear, you need to wait for the first instance of `Bloodborne.exe` to boot, click **Refresh** on the process picker and select process `bb-probe.exe`
+6. Repeat step 4 for each instance that starts automatically
+7. When all the windows are locked in positions correctly, press `End` key to lock input, all controllers should work at that point.
+8. Done!
 
 ## Extra
 - Enable the in-game music only on the first instance, so you won't have music echoing while playing
@@ -124,7 +125,7 @@ The release version of this shadPS4 handler contains the `shadnet-sample` execut
 I already released a [Linux Bloodborne handler for PartyDeck](https://github.com/partydeck/partydeck/issues/219), it requires you to manually retrieve an run the server files though.
 
 ## Todo
-- [ ] Waiting for a proper Seamless Co-op mod
+- [X] Waiting for a proper Seamless Co-op mod
 - [X] Support for [BBPort](https://github.com/Supermedo/bloodborne_pc)
 - [X] Support for [BBHost](https://github.com/droogie/bbhost)
 - [X] Support for other servers other than Wozzardman forks
