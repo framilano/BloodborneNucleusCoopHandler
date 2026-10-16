@@ -285,13 +285,9 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
     Handler.Log("Created user directory in " + instanceBbportUserFolderPath);
     System.IO.Directory.CreateDirectory(instanceBbportUserFolderPath);
   }
-
-  //If the file doesn't exist, we create it first
-  if (!System.IO.File.Exists(instanceBbportSettingsFilePath)) {
-    Handler.Log("Created settings.json in " + instanceBbportSettingsFilePath);
-    System.IO.Directory.CreateDirectory(handlerBbportFolderPath);
-    System.IO.File.Copy(handlerBbportSettingsFilePath, instanceBbportSettingsFilePath, true);
-  }
+  
+  //Replacing existing settings.json
+  System.IO.File.Copy(handlerBbportSettingsFilePath, instanceBbportSettingsFilePath, true);
 
   var gameDirLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'game_dir', Nucleus.SearchType.Contains); 
   var userDirLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'user_dir', Nucleus.SearchType.Contains); 
@@ -301,7 +297,7 @@ function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath
   var shadnetCoopServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_server', Nucleus.SearchType.Contains); 
   var shadnetStatsServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_community', Nucleus.SearchType.Contains); 
 
-  var statsServerUrl = statsServerIpOption == LOCAL_IP ? "http://127.0.0.1:31313" : "https://" + statsServerIpOption + ":31313";
+  var statsServerUrl = statsServerIpOption == LOCAL_IP ? "http://127.0.0.1:31313" : "http://" + statsServerIpOption + ":31313";
 
   var hunterUsername = coopServerIpOption == LOCAL_IP ? "Hunter" + Context.PlayerID : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterUsername"].trim();
   var hunterPassword = coopServerIpOption == LOCAL_IP ? "12345" : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
@@ -337,14 +333,36 @@ function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption,
 
   var upscalingLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'upscaler', Nucleus.SearchType.Contains); 
   var resolutionLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'output_res', Nucleus.SearchType.Contains); 
+  var skipIntroLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'skip_intro', Nucleus.SearchType.Contains); 
 
   var dict = [ 
     upscalingLineNumber + '|upscaler=' + upscalingOption,
     resolutionLineNumber + '|output_res=' + resolutionOption,
+    skipIntroLineNumber + '|skip_intro=1',
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceBbPortInitFilePath, dict);
   Handler.Log("[STOP setupBbPortIniConfig]");
+}
+
+/**
+ * Editing and preparing host_overrides.custom.json
+ */
+function setupCustomHostOverrides(coopServerIpOption) {
+  Handler.Log("[START setupCustomHostOverrides]");
+
+  var handlerCustomHostOverridesFilePath = System.IO.Path.Combine(Game.Folder, "bbsc-splitscreen-files\\host_overrides.custom.json");
+  var instanceCustomHostOverridesFilePath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "user", "host_overrides.custom.json");
+  System.IO.File.Copy(handlerCustomHostOverridesFilePath, instanceCustomHostOverridesFilePath, true);
+
+  var dict = [ 
+    '2|    "https://ss4.scej-network.jp:20443":  "http://' + coopServerIpOption + ':20443",',
+    '3|    "http://thehuntersdream.com:18671/summon_messenger":  "http://' + coopServerIpOption +':31315",',
+    '4|    "https://thehuntersdream.com:18671/summon_messenger":  "http://' + coopServerIpOption +':31315",'
+  ]; 
+
+  Context.ReplaceLinesInTextFile(instanceCustomHostOverridesFilePath, dict);
+  Handler.Log("[STOP setupCustomHostOverrides]");
 }
 
 Game.Play = function() {
@@ -381,6 +399,8 @@ Game.Play = function() {
     Context.CopyFolder(handlerBbscFolderPath, instanceBbPortContentFolderPath);
     System.Environment.SetEnvironmentVariable("BB_PROBE", "bbsc\\bbsc-launch.exe");
     System.Environment.SetEnvironmentVariable("BBSC_EMULATOR", "emulator\\bb-probe.exe");
+
+    setupCustomHostOverrides(coopServerIpOption)
   }
 
   Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");

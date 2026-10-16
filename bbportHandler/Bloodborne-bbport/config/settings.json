@@ -1,6 +1,6 @@
 {
   "ui_language": "",
-  "user_dir": "C:/Users/Francesco/NucleusCoop/Player1/AppData/Roaming/bbport-launcher/user",
+  "user_dir": "placeholder",
   "dlc_dir": "",
   "mods_dir": "",
   "mods_enabled": true,
@@ -35,5 +35,5 @@
   "thd_online_id": "",
   "thd_token": "",
   "online_community": "http://127.0.0.1:31313",
-  "game_dir": "C:/Users/Francesco/Games/EmulationLibrary/ROMs/ps4/CUSA03173"
+  "game_dir": "placeholder"
 }
