@@ -76,6 +76,7 @@ Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p), [fhody125-web
 8. Done!
 
 ## Extra
+- If you're using DS4Windows, remember to go to settings and check `Hide DS4 Controller`
 - Due to how BBSC injection works, it might take a few minutes to load Kin and Hunt Bell, try traveling or open the inventory a bunch of times if they don't appear immediately.
 - Enable the in-game music only on the first instance, so you won't have music echoing while playing
 - You can import your own save file on all instances and then register them on each profile, the save folder for each player is `C:\Users\<YOUR_USERNAME>\NucleusCoop\<PlayerX>\AppData\Roaming\bbport-launcher\user\savedata\1`. Launch the game after replacing the save files and the server will associate them with the shadnet user you're using. Remember that you can use the [Bloodborne save editor](https://github.com/Noxde/Bloodborne-save-editor) to setup your saves more quickly
