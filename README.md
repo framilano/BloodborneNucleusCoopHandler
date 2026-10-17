@@ -71,7 +71,7 @@ Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p), [fhody125-web
 3. Enter your credentials, if using `127.0.0.1` as a coop server you must leave these fields blank, otherwise you must input both username and password for each player registered on the external coop server.
 4. If you want to use BBSC Seamless Mod, download the files from [here](https://install.seamlesshunt.com/index.html#downloads) and extract the zip content into the `bbsc-files` folder present in my handler. Seamless by Classmg is started automatically when selecting both stats and coop server with `127.0.0.1` and `Enable Seamless option` is also enabled. If using it locally the BBSC account will be handled automatically, if you're using it with `play.seamlesshunt.com` then you'll need to [create an account first](https://install.seamlesshunt.com/index.html) for each instance.
 5. When the handler starts the *Nucleus Coop Process Picker* will appear, you need to wait for the first instance of `Bloodborne.exe` to boot, click **Refresh** on the process picker and select process `bb-probe.exe`
-6. Repeat step 4 for each instance that starts automatically
+6. Repeat the previous step for each instance that starts automatically
 7. When all the windows are locked in positions correctly, press `End` key to lock input, all controllers should work at that point.
 8. Done!
 
