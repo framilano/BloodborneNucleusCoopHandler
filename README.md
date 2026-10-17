@@ -101,7 +101,7 @@ To have a full offline experience we need to run both these servers together, th
   * 2a) If you want to play with **Wozzardman** fork of the coop server, download the latest released `shadPS4.exe` from Wozzardman [shadp2p repository](https://github.com/Wozzardman/shadp2p/releases).
   * 2b) If you want to play using the **NoDreamForTheHunter** version, download the latest release `shadps4.exe` from their [site](https://nodreamforthehunter.com/howtoplay) and rename it to `shadPS4.exe`
   * 2c) If you want to play with BBSC seamless coop, download the latest Nucleus release from [BBSC repository](https://github.com/Classmg22/BBSC) or [here](https://install.seamlesshunt.com/index.html#downloads). There should be an `emulator` and `mods` folders inside the zip. Take only the `shadPS4.exe` included in the `emulator` folder and the `mods` folder, delete the rest, you must keep the `shadPS4.exe` executable and the `mods` folder close to each other!
-3. Select the `shadPS4.exe` **(it must have the mods folder near the it if using seamless coop!)** you downloaded using Nucleus Co-op UI, as soon as you select it the Bloodborne handler should appear
+3. Select the `shadPS4.exe` **(it must have the mods folder near it if you want to use seamless coop!)** you downloaded using Nucleus Co-op UI, as soon as you select it the Bloodborne handler should appear
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
