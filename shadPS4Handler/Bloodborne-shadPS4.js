@@ -232,9 +232,9 @@ function setupStatsShadnetServer() {
   Handler.Log("[START setupStatsShadnetServer]");
 
   var executable = "BBSC-GameServer.exe";
-  var arguments = "--shadnet 127.0.0.1 --host 127.0.0.1";
+  var execArgs = "--shadnet 127.0.0.1 --host 127.0.0.1";
   var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_STATS_FORK, executable);
-  Context.StartProcess(handlerStatsExecutableFilePath, arguments, false);
+  Context.StartProcess(handlerStatsExecutableFilePath, execArgs, false);
 
   Handler.Log("[STOP setupStatsShadnetServer]");
 }

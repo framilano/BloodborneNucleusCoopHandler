@@ -86,7 +86,9 @@ Game.MaxPlayers = 4;
 
 //#################### File System ####################
 
-Game.HardcopyGame = true;
+Game.HardlinkGame = true;
+//Game.DirSymlinkCopyInstead = ["bin"];
+//Game.FileSymlinkCopyInstead = ["Bloodborne.exe", "Play Bloodborne.exe", "bbport.ini"];
 Game.RunLauncherAndExe = false;
 Game.ExecutableNames = ["Bloodborne.exe", "bb-probe.exe", "Play Bloodborne.exe"]
 
@@ -114,7 +116,7 @@ Game.Description =
   "- Bloodborne game files\n\n" +
   "Instructions:\n" + 
   "The only required step is selecting the Bloodborne.exe executable.";
-Game.ForceProcessSearch = true;
+Game.ForceProcessSearch = false;
 Game.KillProcessesOnClose = [ "BBSC-GameServer", "shadnet" ];
 
 //#################### ProtoInput ####################
@@ -242,9 +244,9 @@ function setupStatsShadnetServer() {
   Handler.Log("[START setupStatsShadnetServer]");
 
   var executable = "BBSC-GameServer.exe";
-  var arguments = "--shadnet 127.0.0.1 --host 127.0.0.1";
+  var execArgs = "--shadnet 127.0.0.1 --host 127.0.0.1";
   var handlerStatsExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_STATS_FORK, executable);
-  Context.StartProcess(handlerStatsExecutableFilePath, arguments, false);
+  Context.StartProcess(handlerStatsExecutableFilePath, execArgs, false);
 
   Handler.Log("[STOP setupStatsShadnetServer]");
 }
@@ -272,7 +274,7 @@ function setupCoopShadnetServer() {
 /**
  * Editing settings.json
  */
-function setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption) {
+function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption) {
   Handler.Log("[START setupBbPortSettingsConfig]");
 
   var handlerBbportSettingsFilePath = System.IO.Path.Combine(Game.Folder, "config\\settings.json");
@@ -383,7 +385,7 @@ Game.Play = function() {
 
   var handlerBbportFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
   //Setting up settings.json first
-  setupBbPortSettingsConfig(handlerBbportFolderPath, bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption);
+  setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption);
 
   var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
 
