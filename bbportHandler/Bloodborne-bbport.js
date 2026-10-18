@@ -18,6 +18,7 @@ Game.AddOption(
   "Stats Server IP",
   "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
   "- 127.0.0.1, will setup locally a stats server,\n" +
+  "- play.seamlesshunt.com, will connect to BBSC official coop server\n" +
   "- thehuntersdream.com, will connect you to the shadPS4 team hosted stats server",
   "statsServerIpOption", 
   []
@@ -99,10 +100,7 @@ Game.UserProfileSavePath = "AppData\\Roaming\\bbport-launcher";
 
 //#################### Focus ####################
 
-Game.FakeFocus = true;
-Game.HookFocus = true;
-Game.HookInit = true;
-Game.PreventWindowDeactivation = false;
+
 Game.ForceProcessPick = true;
 
 //#################### Extra ####################
@@ -177,65 +175,6 @@ Game.ProtoInput.RenameHandles = []
 // It doesn't matter if controller input still works since it won't get in the way
 Game.ProtoInput.XinputHook = true;
 Game.ProtoInput.UseOpenXinput = true;
-Game.ProtoInput.UseDinputRedirection = false;
-// The old Nucleus options. Don't use these with the Xinput hook
-Game.Hook.DInputEnabled = false;
-Game.Hook.DInputForceDisable = false;
-Game.Hook.XInputEnabled = false;
-Game.Hook.XInputReroute = false;
-Game.Hook.CustomDllEnabled = false;
-
-Game.ProtoInput.OnInputLocked = function() {    
-  for (var i = 0; i < PlayerList.Count; i++)    {        
-    var player = PlayerList[i];
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetCursorPosHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.SetCursorPosHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyStateHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetAsyncKeyStateHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyboardStateHookID);        
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.CursorVisibilityStateHookID);
-    ProtoInput.InstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.FocusHooksHookID);
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.RawInputFilterID);
-    // Avoid the mouse move filter unless absolutely necessary as it can massively affect performance if the game gets primary input from mouse move moessages        
-    //ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseMoveFilterID);
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseActivateFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateAppFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseWheelFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseButtonFilterID);        
-    ProtoInput.EnableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.KeyboardButtonFilterID);
-    ProtoInput.SetDrawFakeCursor(player.ProtoInputInstanceHandle, false);
-    ProtoInput.StartFocusMessageLoop(player.ProtoInputInstanceHandle, 5, true, true, true, true, true);
-    // Disable the bypass: let the input be processed by Proto Input        
-    ProtoInput.SetRawInputBypass(player.ProtoInputInstanceHandle, false);    
-  }
-}
-Game.ProtoInput.OnInputUnlocked = function(){    
-  for (var i = 0; i < PlayerList.Count; i++)    {        
-    var player = PlayerList[i];
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetCursorPosHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.SetCursorPosHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyStateHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetAsyncKeyStateHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.GetKeyboardStateHookID);        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.CursorVisibilityStateHookID);
-    // Intentionally disable focus so all the instances don't respond to input at the same time        
-    ProtoInput.UninstallHook(player.ProtoInputInstanceHandle, ProtoInput.Values.FocusHooksHookID);
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.RawInputFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseMoveFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseActivateFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.WindowActivateAppFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseWheelFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.MouseButtonFilterID);        
-    ProtoInput.DisableMessageFilter(player.ProtoInputInstanceHandle, ProtoInput.Values.KeyboardButtonFilterID);
-    ProtoInput.SetDrawFakeCursor(player.ProtoInputInstanceHandle, false);
-    // Intentionally disable focus so all the instances don't respond to input at the same time       
-    ProtoInput.StopFocusMessageLoop(player.ProtoInputInstanceHandle);
-    // Enable the bypass: allow any raw input to pass       
-    ProtoInput.SetRawInputBypass(player.ProtoInputInstanceHandle, true);   
-  }
-}
 
 /*
  * Setting up stats shadnet server
