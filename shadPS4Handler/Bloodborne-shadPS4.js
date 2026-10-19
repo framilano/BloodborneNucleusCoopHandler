@@ -93,6 +93,7 @@ Game.SetForegroundWindowElsewhere = true;
 Game.Hook.ForceFocus = true;
 Game.Hook.ForceFocusWindowName = "shadPS4";
 Game.ForceProcessPick = false;
+Game.SetTopMostAtEnd = true;
 
 //#################### Extra ####################
 

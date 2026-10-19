@@ -102,6 +102,7 @@ Game.UserProfileSavePath = "AppData\\Roaming\\bbport-launcher";
 
 
 Game.ForceProcessPick = true;
+Game.SetTopMostAtEnd = true;
 
 //#################### Extra ####################
 

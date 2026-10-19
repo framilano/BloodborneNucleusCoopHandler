@@ -36,8 +36,6 @@ Game.MaxPlayers = 4;
 //#################### File System ####################
 
 Game.SymlinkGame = true;
-Game.HardlinkGame = false;
-Game.RunLauncherAndExe = false;
 Game.ExecutableNames = ["bbhost.exe"]
 
 //#################### Nucleus Co-op Environment ####################
@@ -47,13 +45,13 @@ Game.UserProfileSavePath = "AppData\\Roaming\\bbhost";
 
 //#################### Focus ####################
 
-Game.HasDynamicWindowTitle = true;
 Game.RefreshWindowAfterStart = true;
 Game.ResetWindows = true;
 Game.SetForegroundWindowElsewhere = true;
 Game.Hook.ForceFocus = true;
 Game.Hook.ForceFocusWindowName = "Bloodborne (bbhost)";
-Game.ForceProcessPick = false;
+Game.SetTopMostAtEnd = true;
+Game.ToggleUnfocusOnInputsLock = true;
 
 //#################### Extra ####################
 
@@ -177,11 +175,7 @@ function setupBbHostConfig(handlerBbhostFolderPath, skipLauncherOption) {
   if (!System.IO.File.Exists(instanceBbhostFilePath)) { 
     Handler.Log("File bbhost.toml doesn't exist, skipping...");
     return;
-  } else {
-    Handler.Log("It exists!!!");
   }
-
-  Handler.Log("HELLO!");
 
   var skipLauncherLineNumber = Context.FindLineNumberInTextFile(instanceBbhostFilePath, 'setup_window = ', Nucleus.SearchType.Contains); 
 
