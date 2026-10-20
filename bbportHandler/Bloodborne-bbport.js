@@ -88,8 +88,6 @@ Game.MaxPlayers = 4;
 //#################### File System ####################
 
 Game.HardlinkGame = true;
-//Game.DirSymlinkCopyInstead = ["bin"];
-//Game.FileSymlinkCopyInstead = ["Bloodborne.exe", "Play Bloodborne.exe", "bbport.ini"];
 Game.RunLauncherAndExe = false;
 Game.ExecutableNames = ["Bloodborne.exe", "bb-probe.exe", "Play Bloodborne.exe"]
 
@@ -264,14 +262,7 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
 function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption) {
   Handler.Log("[START setupBbPortIniConfig]");
 
-  var handlerBbPortInitFilePath = System.IO.Path.Combine(Game.Folder, "config\\bbport.ini");
   var instanceBbPortInitFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "bbport.ini");
-
-  //Creating bbport.ini
-  if (!System.IO.File.Exists(instanceBbPortInitFilePath)) {
-    Handler.Log("Created bbport.ini in " + instanceBbPortInitFilePath);
-    System.IO.File.Copy(handlerBbPortInitFilePath, instanceBbPortInitFilePath, true);
-  }
 
   var upscalingLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'upscaler', Nucleus.SearchType.Contains); 
   var resolutionLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'output_res', Nucleus.SearchType.Contains); 

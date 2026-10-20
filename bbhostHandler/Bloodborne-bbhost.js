@@ -160,51 +160,19 @@ function setupBbHostOptionsConfig(handlerBbhostFolderPath, resolutionOption, fra
   Handler.Log("[STOP setupBbHostOptionsConfig]");
 }
 
-/**
- * Setting bbhost.toml file
- */
-function setupBbHostConfig(handlerBbhostFolderPath, skipLauncherOption) {
-  Handler.Log("[START setupBbHostConfig]");
-
-  var handlerBbhostFilePath = System.IO.Path.Combine(Game.Folder, "bbhost.toml");
-  var instanceBbhostFilePath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "bbhost.toml");
-
-  Handler.Log(instanceBbhostFilePath);
-
-  //If the file doesn't exist, we ignore this setting, the launcher will run anyway
-  if (!System.IO.File.Exists(instanceBbhostFilePath)) { 
-    Handler.Log("File bbhost.toml doesn't exist, skipping...");
-    return;
-  }
-
-  var skipLauncherLineNumber = Context.FindLineNumberInTextFile(instanceBbhostFilePath, 'setup_window = ', Nucleus.SearchType.Contains); 
-
-  Handler.Log(skipLauncherLineNumber);
-
-  var dict = [ 
-    skipLauncherLineNumber + '|setup_window = ' + skipLauncherOption == "Yes" ? "true" : "false"
-  ];
-  Context.ReplaceLinesInTextFile(instanceBbhostFilePath, dict);
-  Handler.Log("[STOP setupBbHostConfig]");
-}
-
 Game.Play = function() {
   //User answers
   var bloodborneFolderPath = Context.Options["bloodborneFolderPath"].trim().replace(/"/g, '');
   var decryptedEbootFilePath = Context.Options["decryptedEbootFilePath"].trim().replace(/"/g, '');
   var resolutionOption = Context.Options["resolutionOption"].split(" ")[0];
   var framerateOption = Context.Options["framerateOption"];
-  //var skipLauncherOption = Context.Options["skipLauncherOption"];
-  var skipLauncherOption = "No";
+  var skipLauncherOption = Context.Options["skipLauncherOption"];
 
   var handlerBbhostFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
 
 
   //Setting up bbhost-options.toml
   setupBbHostOptionsConfig(handlerBbhostFolderPath, resolutionOption, framerateOption);
-
-  //Setting up bbhost.toml
-  //setupBbHostConfig(handlerBbhostFolderPath, skipLauncherOption);
   
   var instanceBbhostDataFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "data");
   Context.StartArguments = "--data \"" + instanceBbhostDataFolderPath + "\" --app0 \"" + bloodborneFolderPath + "\" --eboot \"" + decryptedEbootFilePath + "\"";
