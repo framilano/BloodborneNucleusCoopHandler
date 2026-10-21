@@ -51,7 +51,7 @@ Game.AddOption("Desidered FrameRate Cap",
 );
 
 //Ask for the upscaling option used by all instances
-var upscalingOptions = ["off", "fsr3 (works on all GPUs)", "fsr4 (better quality)", "fsr411 (requires fsr4.1.1 files)", "dlss (requires RTX GPU)", "taa (native antialiasing)"];
+var upscalingOptions = ["off", "fsr3 (works on all GPUs)", "fsr4 (better quality)", "fsr411 (even better quality)", "dlss (requires RTX GPU)", "taa (native antialiasing)"];
 Game.AddOption("Desidered Upscaling Technology", 
   "Enter your desired upscaling technology used by all instances", 
   "upscalingOption", 
