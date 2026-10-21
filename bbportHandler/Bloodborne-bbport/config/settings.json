@@ -1,5 +1,6 @@
 {
   "ui_language": "",
+  "game_dir": "placeholder",
   "user_dir": "placeholder",
   "dlc_dir": "",
   "mods_dir": "",
@@ -23,17 +24,16 @@
   "close_on_play": true,
   "check_updates": false,
   "online": true,
-  "online_server": "127.0.0.1:31313",
-  "online_webapi": "http://127.0.0.1:31315",
+  "online_server": "placeholder:31313",
+  "online_webapi": "http://placeholder:31315",
   "online_npid": "Hunter0",
   "online_password": "12345",
   "online_upnp": true,
+  "online_community": "http://placeholder:20443",
   "online_pool": "shadnet",
   "bridge_live_map": false,
   "supermedo_user": "",
   "supermedo_password": "",
   "thd_online_id": "",
-  "thd_token": "",
-  "online_community": "http://127.0.0.1:31313",
-  "game_dir": "placeholder"
+  "thd_token": ""
 }

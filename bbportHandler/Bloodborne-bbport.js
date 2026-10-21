@@ -35,7 +35,7 @@ Game.AddOption(
 );
 
 //Ask for the render resolution used by all instances
-var resolutionOptions = ["1280x720 (16:9)", "1920x1080 (16:9)", "2560x1440 (16:9)", "3840x2160 (16:9)"];
+var resolutionOptions = ["1280x720 (16:9)", "1920x1080 (16:9)", "2560x1440 (16:9)", "3840x2160 (16:9)", "2560x1080 (21:9)", "3440x1440 (21:9)", "3840x1600 (21:9)", "5120x2160 (21:9)", "3840x1080 (32:9)", "5120x1440 (32:9)"];
 Game.AddOption("Render Resolution", 
   "Enter your desired render resolution for all instances", 
   "resolutionOption", 
@@ -97,7 +97,6 @@ Game.UseNucleusEnvironment = true;
 Game.UserProfileSavePath = "AppData\\Roaming\\bbport-launcher";
 
 //#################### Focus ####################
-
 
 Game.ForceProcessPick = true;
 Game.SetTopMostAtEnd = true;
@@ -236,8 +235,9 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
   var shadnetPasswordLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_password', Nucleus.SearchType.Contains); 
   var shadnetCoopServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_server', Nucleus.SearchType.Contains); 
   var shadnetStatsServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_community', Nucleus.SearchType.Contains); 
+  var shadnetWebApiLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_webapi', Nucleus.SearchType.Contains); 
 
-  var statsServerUrl = statsServerIpOption == LOCAL_IP ? "http://127.0.0.1:31313" : "http://" + statsServerIpOption + ":31313";
+  var statsServerUrl = statsServerIpOption == LOCAL_IP ? "http://127.0.0.1" : "http://" + statsServerIpOption + "";
 
   var hunterUsername = coopServerIpOption == LOCAL_IP ? "Hunter" + Context.PlayerID : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterUsername"].trim();
   var hunterPassword = coopServerIpOption == LOCAL_IP ? "12345" : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
@@ -249,7 +249,8 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
     shadnetUsernameLineNumber + '|  "online_npid": "' + hunterUsername +'",',
     shadnetPasswordLineNumber + '|  "online_password": "' + hunterPassword +'",',
     shadnetCoopServerLineNumber + '|  "online_server": "' + coopServerIpOption +':31313",',
-    shadnetStatsServerLineNumber + '|  "online_community": "' + statsServerUrl + '",'
+    shadnetStatsServerLineNumber + '|  "online_community": "' + statsServerUrl + ':20443",',
+    shadnetWebApiLineNumber + '|  "online_webapi": "' + statsServerUrl + ':31315",',
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceBbportSettingsFilePath, dict);
