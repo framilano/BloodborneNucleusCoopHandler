@@ -58,6 +58,14 @@ Game.AddOption("Desidered Upscaling Technology",
   upscalingOptions
 );
 
+//Ask for the upscaling option used by all instances
+var upscalingPresetOptions = ["0 - Native AA", "1 - Quality", "2 - Balanced", "3 - Performance", "4 - Ultra Performance"];
+Game.AddOption("Desidered Upscaling Preset", 
+  "Enter your desired upscaling preset used by all instances", 
+  "upscalingPresetOption", 
+  upscalingPresetOptions
+);
+
 //Ask if we should enable seamless support
 var seamlessOptions = ["Yes", "No"];
 Game.AddOption(
@@ -231,6 +239,8 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
   var gameDirLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'game_dir', Nucleus.SearchType.Contains); 
   var userDirLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'user_dir', Nucleus.SearchType.Contains); 
   var fpsModeLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'fps_mode', Nucleus.SearchType.Contains); 
+  var onlineLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, '"online":', Nucleus.SearchType.Contains); 
+  var onlineCustomServersLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_custom_servers', Nucleus.SearchType.Contains); 
   var shadnetUsernameLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_npid', Nucleus.SearchType.Contains); 
   var shadnetPasswordLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_password', Nucleus.SearchType.Contains); 
   var shadnetCoopServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_server', Nucleus.SearchType.Contains); 
@@ -246,6 +256,8 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
     gameDirLineNumber + "|  \"game_dir\": \"" + bloodborneFolderPath.replace(/\\/g, "/") + "\"" + (gameDirLineNumber != 38 ? "," : ""),
     userDirLineNumber + '|  "user_dir": "' + instanceBbportUserFolderPath.replace(/\\/g, "/") +'",',
     fpsModeLineNumber + '|  "fps_mode": "'+ framerateOption +'",',
+    onlineLineNumber + '|  "online": true,',
+    onlineCustomServersLineNumber + '|  "online_custom_servers": true,',
     shadnetUsernameLineNumber + '|  "online_npid": "' + hunterUsername +'",',
     shadnetPasswordLineNumber + '|  "online_password": "' + hunterPassword +'",',
     shadnetCoopServerLineNumber + '|  "online_server": "' + coopServerIpOption +':31313",',
@@ -260,17 +272,30 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
 /**
  * Editing content instance bbport.ini
  */
-function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption) {
+function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption) {
   Handler.Log("[START setupBbPortIniConfig]");
 
+  var handlerBbPortInitFilePath = System.IO.Path.Combine(Game.Folder, "config\\bbport.ini");
   var instanceBbPortInitFilePath = System.IO.Path.Combine(instanceBbPortContentFolderPath, "bbport.ini");
+  var instanceBbportUserFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "user");
+
+  //Creating user folder if it doesn't exist
+  if (!System.IO.Directory.Exists(instanceBbportUserFolderPath)) {
+    Handler.Log("Created user directory in " + instanceBbportUserFolderPath);
+    System.IO.Directory.CreateDirectory(instanceBbportUserFolderPath);
+  }
+  
+  //Replacing existing settings.json
+  System.IO.File.Copy(handlerBbPortInitFilePath, instanceBbPortInitFilePath, true);
 
   var upscalingLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'upscaler', Nucleus.SearchType.Contains); 
+  var upscalingPresetLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'preset', Nucleus.SearchType.Contains); 
   var resolutionLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'output_res', Nucleus.SearchType.Contains); 
   var skipIntroLineNumber = Context.FindLineNumberInTextFile(instanceBbPortInitFilePath, 'skip_intro', Nucleus.SearchType.Contains); 
 
   var dict = [ 
     upscalingLineNumber + '|upscaler=' + upscalingOption,
+    upscalingPresetLineNumber + '|preset=' + upscalingPresetOption,
     resolutionLineNumber + '|output_res=' + resolutionOption,
     skipIntroLineNumber + '|skip_intro=1',
   ]; 
@@ -305,6 +330,7 @@ Game.Play = function() {
   var resolutionOption = Context.Options["resolutionOption"].split(" ")[0];
   var framerateOption = Context.Options["framerateOption"];
   var upscalingOption = Context.Options["upscalingOption"].split(" ")[0];
+  var upscalingPresetOption = Context.Options["upscalingPresetOption"].split(" ")[0];
   var statsServerIpOption = Context.Options["statsServerIpOption"].trim();
   var coopServerIpOption = Context.Options["coopServerIpOption"].trim();
   var seamlessOption = Context.Options["seamlessOption"].trim();
@@ -322,7 +348,7 @@ Game.Play = function() {
   var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
 
   //Setting up bbport.ini
-  setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption);
+  setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption);
 
   //Paste bbsc files if seamless is enabled
   if (seamlessOption == "Yes") {
@@ -336,6 +362,6 @@ Game.Play = function() {
 
     setupCustomHostOverrides(coopServerIpOption)
   }
-
+  
   Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
 };
