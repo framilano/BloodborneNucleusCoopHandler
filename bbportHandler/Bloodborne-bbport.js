@@ -3,7 +3,7 @@ Hub.Handler.Id = "itvyiC7oPTx2Lvb7c";
 Hub.Maintainer.Name = "framilano";
 Hub.Maintainer.Id = "va6S2wcYCxth3FSgZ";
 
-const LOCAL_IP = "127.0.0.1";
+const LOCAL_IP = "http://127.0.0.1";
 const SHADPS4_STATS_URL = "thehuntersdream.com";
 const SHADNET_STATS_FORK = "clsamg22-stats-coop-server";
 const SHADNET_COOP_FORK = "clsamg22-stats-coop-server";
@@ -15,22 +15,23 @@ Game.AddOption("Bloodborne Folder Path", "Enter Bloodborne folder path (the CUSA
 
 //Stats Server IP option
 Game.AddOption(
-  "Stats Server IP",
-  "Enter your desired stats server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a stats server,\n" +
-  "- play.seamlesshunt.com, will connect to BBSC official coop server\n" +
-  "- thehuntersdream.com, will connect you to the shadPS4 team hosted stats server",
-  "statsServerIpOption", 
+  "Stats Server URL",
+  "Enter your desired stats server url for Bloodborne, suggested ones are:\n" +
+  "- http://127.0.0.1, will setup locally a stats server,\n" +
+  "- https://play.seamlesshunt.com, will connect to BBSC official coop server\n" +
+  "- https://thehuntersdream.com, will connect you to the shadPS4 team hosted stats server",
+  "statsServerUrlOption", 
   []
 );
 
 //Coop Server IP option
 Game.AddOption(
-  "Co-op Server IP",
-  "Enter your desired co-op server ip for Bloodborne, suggested ones are:\n" +
-  "- 127.0.0.1, will setup locally a coop server\n" +
-  "- play.seamlesshunt.com, will connect to BBSC official coop server",
-  "coopServerIpOption", 
+  "Co-op Server URL",
+  "Enter your desired co-op server url for Bloodborne, suggested ones are:\n" +
+  "- http://127.0.0.1, will setup locally a coop server\n" +
+  "- https://play.seamlesshunt.com, will connect to BBSC official coop server\n" +
+  "- http://srv.shadps4.net, will connect to official shadnet servers",
+  "coopServerUrlOption", 
   []
 );
 
@@ -185,7 +186,7 @@ Game.ProtoInput.UseOpenXinput = true;
 /*
  * Setting up stats shadnet server
  */
-function setupStatsShadnetServer() {
+function setupLocalStatsShadnetServer() {
   Handler.Log("[START setupStatsShadnetServer]");
 
   var executable = "BBSC-GameServer.exe";
@@ -199,11 +200,17 @@ function setupStatsShadnetServer() {
 /**
  * Setting up shadnet server and register clients manually
  */
-function setupCoopShadnetServer() {
+function setupLocalCoopShadnetServer(seamlessOption) {
   Handler.Log("[START setupCoopShadnetServer]");
 
   //Server setup only during first instance launch  
   if (Context.PlayerID == 0) {
+      //Enabling Seamless if requested by the user
+    var handlerShadnetConfigFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_COOP_FORK, "shadnet.cfg");
+    var seamlessLineNumber = Context.FindLineNumberInTextFile(handlerShadnetConfigFilePath, 'BloodborneSeamlessCoop', Nucleus.SearchType.Contains); 
+    if (seamlessOption == "Yes") var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=true', ]; 
+    else var dict = [ seamlessLineNumber + '|BloodborneSeamlessCoop=false', ]; 
+    Context.ReplaceLinesInTextFile(handlerShadnetConfigFilePath, dict);
     //Start main coop server
     var handlerShadnetExecutableFilePath = System.IO.Path.Combine(Game.Folder, "shadnet", SHADNET_COOP_FORK, "shadnet.exe");
     Context.StartProcess(handlerShadnetExecutableFilePath, "", false);
@@ -219,7 +226,7 @@ function setupCoopShadnetServer() {
 /**
  * Editing settings.json
  */
-function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption) {
+function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsServerUrlOption, coopServerUrlOption) {
   Handler.Log("[START setupBbPortSettingsConfig]");
 
   var handlerBbportSettingsFilePath = System.IO.Path.Combine(Game.Folder, "config\\settings.json");
@@ -247,10 +254,9 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
   var shadnetStatsServerLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_community', Nucleus.SearchType.Contains); 
   var shadnetWebApiLineNumber = Context.FindLineNumberInTextFile(instanceBbportSettingsFilePath, 'online_webapi', Nucleus.SearchType.Contains); 
 
-  var statsServerUrl = statsServerIpOption == LOCAL_IP ? "http://127.0.0.1" : "http://" + statsServerIpOption + "";
 
-  var hunterUsername = coopServerIpOption == LOCAL_IP ? "Hunter" + Context.PlayerID : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterUsername"].trim();
-  var hunterPassword = coopServerIpOption == LOCAL_IP ? "12345" : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
+  var hunterUsername = coopServerUrlOption == LOCAL_IP ? "Hunter" + Context.PlayerID : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterUsername"].trim();
+  var hunterPassword = coopServerUrlOption == LOCAL_IP ? "12345" : Context.Options["shadnetPlayer" + Context.PlayerID + "HunterPassword"].trim();
 
   var dict = [ 
     gameDirLineNumber + "|  \"game_dir\": \"" + bloodborneFolderPath.replace(/\\/g, "/") + "\"" + (gameDirLineNumber != 38 ? "," : ""),
@@ -260,9 +266,9 @@ function setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsS
     onlineCustomServersLineNumber + '|  "online_custom_servers": true,',
     shadnetUsernameLineNumber + '|  "online_npid": "' + hunterUsername +'",',
     shadnetPasswordLineNumber + '|  "online_password": "' + hunterPassword +'",',
-    shadnetCoopServerLineNumber + '|  "online_server": "' + coopServerIpOption +':31313",',
-    shadnetStatsServerLineNumber + '|  "online_community": "' + statsServerUrl + ':20443",',
-    shadnetWebApiLineNumber + '|  "online_webapi": "' + statsServerUrl + ':31315",',
+    shadnetCoopServerLineNumber + '|  "online_server": "' + coopServerUrlOption.replace("http://", "").replace("https://", "") +':31313",',
+    shadnetStatsServerLineNumber + '|  "online_community": "' + statsServerUrlOption + ':20443",',
+    shadnetWebApiLineNumber + '|  "online_webapi": "' + coopServerUrlOption + ':31315",',
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceBbportSettingsFilePath, dict);
@@ -305,9 +311,9 @@ function setupBbPortIniConfig(instanceBbPortContentFolderPath, resolutionOption,
 }
 
 /**
- * Editing and preparing host_overrides.custom.json
+ * Editing and preparing host_overrides.custom.json for BBSC
  */
-function setupCustomHostOverrides(coopServerIpOption) {
+function setupCustomHostOverrides(coopServerUrlOption) {
   Handler.Log("[START setupCustomHostOverrides]");
 
   var handlerCustomHostOverridesFilePath = System.IO.Path.Combine(Game.Folder, "bbsc-splitscreen-files\\host_overrides.custom.json");
@@ -315,9 +321,9 @@ function setupCustomHostOverrides(coopServerIpOption) {
   System.IO.File.Copy(handlerCustomHostOverridesFilePath, instanceCustomHostOverridesFilePath, true);
 
   var dict = [ 
-    '2|    "https://ss4.scej-network.jp:20443":  "http://' + coopServerIpOption + ':20443",',
-    '3|    "http://thehuntersdream.com:18671/summon_messenger":  "http://' + coopServerIpOption +':31315",',
-    '4|    "https://thehuntersdream.com:18671/summon_messenger":  "http://' + coopServerIpOption +':31315",'
+    '2|    "https://ss4.scej-network.jp:20443":  "' + coopServerUrlOption + ':20443",',
+    '3|    "http://thehuntersdream.com:18671/summon_messenger":  "' + coopServerUrlOption + ':31315",',
+    '4|    "https://thehuntersdream.com:18671/summon_messenger":  "' + coopServerUrlOption + ':31315",'
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceCustomHostOverridesFilePath, dict);
@@ -331,19 +337,18 @@ Game.Play = function() {
   var framerateOption = Context.Options["framerateOption"];
   var upscalingOption = Context.Options["upscalingOption"].split(" ")[0];
   var upscalingPresetOption = Context.Options["upscalingPresetOption"].split(" ")[0];
-  var statsServerIpOption = Context.Options["statsServerIpOption"].trim();
-  var coopServerIpOption = Context.Options["coopServerIpOption"].trim();
+  var statsServerUrlOption = Context.Options["statsServerUrlOption"].trim();
+  var coopServerUrlOption = Context.Options["coopServerUrlOption"].trim();
   var seamlessOption = Context.Options["seamlessOption"].trim();
 
   //Run the servers and register the clients
-  if (statsServerIpOption == LOCAL_IP && Context.PlayerID == 0) setupStatsShadnetServer();
+  if (statsServerUrlOption == LOCAL_IP && Context.PlayerID == 0) setupLocalStatsShadnetServer();
 
   //Set up coop server
-  if (coopServerIpOption == LOCAL_IP) setupCoopShadnetServer();
+  if (coopServerUrlOption == LOCAL_IP) setupLocalCoopShadnetServer(seamlessOption);
 
-  var handlerBbportFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
   //Setting up settings.json first
-  setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsServerIpOption, coopServerIpOption);
+  setupBbPortSettingsConfig(bloodborneFolderPath, framerateOption, statsServerUrlOption, coopServerUrlOption);
 
   var instanceBbPortContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
 
@@ -360,7 +365,7 @@ Game.Play = function() {
     System.Environment.SetEnvironmentVariable("BB_PROBE", "bbsc\\bbsc-launch.exe");
     System.Environment.SetEnvironmentVariable("BBSC_EMULATOR", "emulator\\bb-probe.exe");
 
-    setupCustomHostOverrides(coopServerIpOption)
+    setupCustomHostOverrides(coopServerUrlOption)
   }
   
   Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
