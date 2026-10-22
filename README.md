@@ -14,12 +14,6 @@ Bloodborne handlers for [shadPS4](https://github.com/shadps4-emu/shadps4), [bbho
   - [How to install](#how-to-install-1)
   - [Handler Instructions](#handler-instructions-1)
   - [Extra](#extra-1)
-- [shadPS4](#shadps4)
-  - [How does it work](#how-does-it-work-2)
-  - [How to install](#how-to-install-2)
-  - [Handler Instructions](#handler-instructions-2)
-  - [Extra](#extra-2)
-- [Building](#building)
 - [Linux](#linux)
 - [Todo](#todo)
 - [AI Disclaimer](#ai-disclaimer)
@@ -28,13 +22,11 @@ Bloodborne handlers for [shadPS4](https://github.com/shadps4-emu/shadps4), [bbho
 # bbhost
 <img width="2559" height="1436" alt="Screenshot 2026-10-10 124222" src="https://github.com/user-attachments/assets/01ecbf7f-6665-4977-b4b9-4ad28961958a" />
 
-**This handler supports 32:9 ratios!**
-
-## How does it work
-**This handler only works with [bbhost](https://github.com/droogie/bbhost)**
-
-Uses bbhost official [server](https://thehuntersdream.com/) to connect two local players in the same instance. You can play locally with 2 or more player and join other people online! It runs better than shadPS4 and has more PC specific customizations too.
-**This handler is always-online**
+## Features
+- **This handler only works with [bbhost](https://github.com/droogie/bbhost)**
+- Supports ultrawide resolutions
+- This handler is **always-online**
+- Uses bbhost official [server](https://thehuntersdream.com/) to connect two local players in the same instance. You can play locally with 2 or more player and join other people online! It runs better than shadPS4 and has more PC specific customizations too.
 
 ## How to install
 1. Download the latest `bbhostHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
@@ -51,18 +43,18 @@ Uses bbhost official [server](https://thehuntersdream.com/) to connect two local
 - You can import your own save file on all instances and then register them on each profile, the save folder for each player is `C:\Users\<YOUR_USERNAME>\NucleusCoop\<PlayerX>\AppData\Roaming\bbhost\data\saves`. Launch the game after replacing the save files and the server will associate them with the shadnet user you're using. Remember that you can use the [Bloodborne save editor](https://github.com/Noxde/Bloodborne-save-editor) to setup your saves more quickly
 
 # bbport
-**This handler only works with this [bbport fork](https://github.com/Supermedo/bloodborne_pc)**
 
-**This handler works both completely offline and online**
-
-## How does it work
-Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p), [fhody125-web-fork](https://github.com/fhody125-web/NoDreamForHunter/) server forks to play coop **completely offline** and it supports BBSC seamless coop! It runs way better than shadPS4 and has more PC specific customizations too.
-
+## Features
+- **This handler only works with this [bbport fork](https://github.com/Supermedo/bloodborne_pc)**
+- Supports [BBSC Seamless Coop](https://github.com/CLSAMG22/BBSC), BBSC only works with [Supermedo fork <= 1.7.8](https://github.com/Supermedo/bloodborne_pc/releases/tag/windows-v1.7.8)
+- This handler works with BBSC offline/online and vanilla coop completely offline (also only with [Supermedo fork <= 1.7.8](https://github.com/Supermedo/bloodborne_pc/releases/tag/windows-v1.7.8))
+- Supports ultrawide resolutions (without BBSC)
+  
 ## How to install
-0. Please use a clean folder of [bbport fork](https://github.com/Supermedo/bloodborne_pc), do not reuse an existing installation, create a separate folder!
-1. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
-2. Move the downloaded files to the NucleusCoop `handlers` folder
-3. Select `Bloodborne.exe` from NucleusCoop GUI, 
+1. Please use a clean folder for your Supermedo fork, do not reuse an existing installations, create a separate folder!
+2. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
+3. Move the downloaded files to the NucleusCoop `handlers` folder
+4. Select `Bloodborne.exe` from NucleusCoop GUI, 
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
@@ -80,49 +72,6 @@ Uses [wozzardman fork](https://github.com/Wozzardman/shadnet-p2p), [fhody125-web
 - Due to how BBSC injection works, it might take a few minutes to load Kin and Hunt Bell, try traveling or open the inventory a bunch of times if they don't appear immediately.
 - Enable the in-game music only on the first instance, so you won't have music echoing while playing
 - You can import your own save file on all instances and then register them on each profile, the save folder for each player is `C:\Users\<YOUR_USERNAME>\NucleusCoop\<PlayerX>\AppData\Roaming\bbport-launcher\user\savedata\1`. Launch the game after replacing the save files and the server will associate them with the shadnet user you're using. Remember that you can use the [Bloodborne save editor](https://github.com/Noxde/Bloodborne-save-editor) to setup your saves more quickly
-
-# shadPS4
-## Showcase
-https://youtu.be/Jml26Eonlv0
- 
-## How does it work
-Bloodborne servers emulation currently requires two components:
-- **A stats server**, that handles user messages, ghosts and generic stats
-- **A co-op server**, that allows for summonings and invasions
-
-To have a full offline experience we need to run both these servers together, this is possible thanks to these two open source projects:
-1. The [NoDreamForHunter](https://github.com/fhody125-web/NoDreamForHunter/) from fhody125-web gives us an offline stats server, this is not the same as [nodreamforthehunter](https://nodreamforthehunter.com/)
-2. The [Shadnet-P2P](https://github.com/Wozzardman/shadnet-p2p) from Wozzardman gives us an offline shadnet server that supports co-op and summonings.
-3. The[ Seamless Coop mod](https://github.com/Classmg22/BBSC) by Classmg22, give us both coop and stats server to run locally
-
-## How to install
-1. Download and extract the latest `shadPS4Handler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
-2. Copy the content of the extracted folder to `<YOUR_NUCLEUS_INSTALLATION>/handlers`, both the `Bloodborne-shadPS4` folder and `Bloodborne-shadPS4.js`
-  * 2a) If you want to play with **Wozzardman** fork of the coop server, download the latest released `shadPS4.exe` from Wozzardman [shadp2p repository](https://github.com/Wozzardman/shadp2p/releases).
-  * 2b) If you want to play using the **NoDreamForTheHunter** version, download the latest release `shadps4.exe` from their [site](https://nodreamforthehunter.com/howtoplay) and rename it to `shadPS4.exe`
-  * 2c) If you want to play with BBSC seamless coop, download the latest Nucleus release from [BBSC repository](https://github.com/Classmg22/BBSC) or [here](https://install.seamlesshunt.com/index.html#downloads). There should be an `emulator` and `mods` folders inside the zip. Take only the `shadPS4.exe` included in the `emulator` folder and the `mods` folder, delete the rest, you must keep the `shadPS4.exe` executable and the `mods` folder close to each other!
-3. Select the `shadPS4.exe` **(it must have the mods folder near it if you want to use seamless coop!)** you downloaded using Nucleus Co-op UI, as soon as you select it the Bloodborne handler should appear
-  <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
-
-## Handler Instructions
-The handler will ask you:
-1. To select your `CUSAXXXXX` folder where your Bloodborne games files are stored
-2. Your desired render resolution for all instances
-3. Your **stats server**, if you type `127.0.0.1` the handler will automatically run the stats server from fhody125-web locally
-4. Your **co-op server**, if you type `127.0.0.1` the handler will automatically run the co-op server from Wozzardman locally
-4. If you want to enable the `Seamless Coop mod` from Classmg22, only makes sense if you're using a Classmg22 Co-op server 
-5. **Players' credentials**, if you're using an online custom co-op server then you'll need to provide each player credential for each instance you're running
-
-A bunch of performance patches are enabled by default, you can edit them in `Bloodborne.xml` contained in the `patches` folder.
-
-## Extra
-- If you want to see ghosts and messages from the official shadPS4 shadnet server, just type `thehuntersdream.com` as a **stats Server**, this requires of course to be online
-- Enable the in-game music only on the first instance, so you won't have music echoing while playing
-- You can still enable mods, using a Mod Manager or BB_Launcher.
-- You can import your own save file on all instances and then register them on each profile, the save folder for each player is `C:\Users\<YOUR_USERNAME>\NucleusCoop\<PlayerX>\AppData\Roaming\shadPS4\home\1000\savedata`. Launch the game after replacing the save files and the server will associate them with the shadnet user you're using. An error could appear regarding the online profile but you can safely ignore it. Repeat this step for each instance and you're done! WARNING: Normal shadPS4 saves do not work on NoDreamForTheHunter coop server, you must start a new game for them, remember that you can use the [Bloodborne save editor](https://github.com/Noxde/Bloodborne-save-editor) to setup your saves more quickly
-
-## Building
-The release version of this shadPS4 handler contains the `shadnet-sample` executable that allows us to register offline clients to the coop server for each instance and the stats server `NoDreamForHunter.exe` executable. All these executables can be build following the linked repositories READMEs.
 
 ## Linux
 I already released a [Linux Bloodborne handler for PartyDeck](https://github.com/partydeck/partydeck/issues/219), it requires you to manually retrieve an run the server files though.
