@@ -51,10 +51,10 @@ Bloodborne handlers for [shadPS4](https://github.com/shadps4-emu/shadps4), [bbho
 - Supports ultrawide resolutions (without BBSC)
   
 ## How to install
-0. Please use a clean folder of [bbport fork](https://github.com/Supermedo/bloodborne_pc), do not reuse an existing installation, create a separate folder!
-1. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
-2. Move the downloaded files to the NucleusCoop `handlers` folder
-3. Select `Bloodborne.exe` from NucleusCoop GUI, 
+1. Please use a clean folder for your Supermedo fork, do not reuse an existing installations, create a separate folder!
+2. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
+3. Move the downloaded files to the NucleusCoop `handlers` folder
+4. Select `Bloodborne.exe` from NucleusCoop GUI, 
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
