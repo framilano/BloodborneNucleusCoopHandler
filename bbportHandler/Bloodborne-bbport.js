@@ -107,7 +107,9 @@ Game.UserProfileSavePath = "AppData\\Roaming\\bbport-launcher";
 
 //#################### Focus ####################
 
-Game.ForceProcessPick = true;
+Game.LauncherTitle = "Bloodborne -- bbport";
+Game.LauncherExe = "Play Bloodborne.exe"
+Game.ExecutableName = "Play Bloodborne.exe"
 Game.SetTopMostAtEnd = true;
 
 //#################### Extra ####################
@@ -120,8 +122,7 @@ Game.Description =
   "Required files:\n" +
   "- Bloodborne game files\n\n" +
   "Instructions:\n" + 
-  "The only required step is selecting the Bloodborne.exe executable.";
-Game.ForceProcessSearch = false;
+  "The only required step is selecting the \"Play Bloodborne.exe\" executable.";
 Game.KillProcessesOnClose = [ "BBSC-GameServer", "shadnet" ];
 
 //#################### ProtoInput ####################
@@ -331,6 +332,8 @@ function setupCustomHostOverrides(coopServerUrlOption) {
 }
 
 Game.Play = function() {
+
+
   //User answers
   var bloodborneFolderPath = Context.Options["bloodborneFolderPath"].trim().replace(/"/g, '');
   var resolutionOption = Context.Options["resolutionOption"].split(" ")[0];
@@ -368,5 +371,6 @@ Game.Play = function() {
     setupCustomHostOverrides(coopServerUrlOption)
   }
   
-  Game.ExecutableToLaunch = System.IO.Path.Combine(instanceBbPortContentFolderPath, "Play Bloodborne.exe");
+  Context.StartArguments = "--play";
+  Game.ExecutableName = System.IO.Path.Combine(instanceBbPortContentFolderPath, "emulator", "bb-probe.exe");
 };
