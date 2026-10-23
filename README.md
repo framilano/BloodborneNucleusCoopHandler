@@ -41,7 +41,7 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
-1. The handler will ask you to select your Bloodborne CUSAXXXXX folder and your `eboot-bin.decrypted`
+1. The handler will ask you to select your Bloodborne CUSAXXXXX folder, resolution, framerate and more
 2. Done!
 
 ## Extra
