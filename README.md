@@ -4,27 +4,27 @@ Bloodborne handlers for [shadPS4](https://github.com/shadps4-emu/shadps4), [bbho
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
 
 ## Table of contents
-- [nightwatch](#nightwatch)
-  - [How does it work](#how-does-it-work)
+- [Nightwatch Co-op](#nightwatch-co-op)
+  - [Features](#features)
   - [How to install](#how-to-install)
   - [Handler Instructions](#handler-instructions)
   - [Extra](#extra)
 - [bbhost](#bbhost)
-  - [How does it work](#how-does-it-work)
-  - [How to install](#how-to-install)
-  - [Handler Instructions](#handler-instructions)
-  - [Extra](#extra)
-- [bbport](#bbport)
-  - [How does it work](#how-does-it-work-1)
+  - [Features](#features-1)
   - [How to install](#how-to-install-1)
   - [Handler Instructions](#handler-instructions-1)
   - [Extra](#extra-1)
+- [bbport](#bbport)
+  - [Features](#features-2)
+  - [How to install](#how-to-install-2)
+  - [Handler Instructions](#handler-instructions-2)
+  - [Extra](#extra-2)
 - [Linux](#linux)
 - [Todo](#todo)
 - [AI Disclaimer](#ai-disclaimer)
 - [Support](#support)
 
-# nightwatch
+# Nightwatch Co-op
 <img width="2559" height="1435" alt="immagine" src="https://github.com/user-attachments/assets/8c845d61-7aca-41d9-a1fa-6f791dccc00d" />
 
 ## Features
