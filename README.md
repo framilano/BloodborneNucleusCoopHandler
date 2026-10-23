@@ -28,7 +28,7 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
 <img width="2559" height="1435" alt="immagine" src="https://github.com/user-attachments/assets/8c845d61-7aca-41d9-a1fa-6f791dccc00d" />
 
 ## Features
-- **This handler only works with [nightwatch](https://github.com/vladtepes22/NightwatchCoop)**
+- **This handler only works with [Nightwatch Co-op](https://github.com/vladtepes22/NightwatchCoop)**
 - Supports ultrawide resolutions
 - This handler is **offline-only**
 - Supports all upscalers and has the best performances of all the handlers
