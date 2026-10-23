@@ -1,5 +1,5 @@
 # Bloodborne Nucleus Co-op Handler
-Bloodborne handlers for [shadPS4](https://github.com/shadps4-emu/shadps4), [bbhost](https://github.com/droogie/bbhost) and [bbport](https://github.com/Supermedo/bloodborne_pc). 
+Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/NightwatchCoop), [bbhost](https://github.com/droogie/bbhost) and [bbport](https://github.com/Supermedo/bloodborne_pc). 
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
 
