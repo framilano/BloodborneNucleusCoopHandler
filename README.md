@@ -78,7 +78,7 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
 - **This handler only works with this [bbport fork](https://github.com/Supermedo/bloodborne_pc)**
 - Supports [BBSC Seamless Coop](https://github.com/CLSAMG22/BBSC), BBSC only works with [Supermedo fork <= 1.7.8](https://github.com/Supermedo/bloodborne_pc/releases/tag/windows-v1.7.8)
 - This handler works with BBSC offline/online and vanilla coop completely offline (also only with [Supermedo fork <= 1.7.8](https://github.com/Supermedo/bloodborne_pc/releases/tag/windows-v1.7.8))
-- Supports ultrawide resolutions (without BBSC)
+- Supports ultrawide resolutions and upscalers
   
 ## How to install
 1. Please use a clean folder for your Supermedo fork, do not reuse an existing installations, create a separate folder!
