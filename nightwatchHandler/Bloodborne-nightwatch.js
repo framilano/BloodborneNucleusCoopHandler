@@ -60,7 +60,6 @@ Game.UserProfileSavePath = "AppData\\Roaming\\bloodborne-seamless";
 
 //#################### Focus ####################
 
-Game.ForceProcessPick = false;
 Game.SetTopMostAtEnd = true;
 Game.LauncherTitle = "Nightwatch Co-op";
 Game.LauncherExe = "Nightwatch Co-op.exe"
@@ -68,16 +67,16 @@ Game.ExecutableName = "Nightwatch Co-op.exe"
 
 //#################### Extra ####################
 
-Game.PauseBetweenContextAndLaunch = 0;
-Game.PauseBetweenProcessGrab = 10;
+Game.PauseBetweenContextAndLaunch = 10;
+Game.PauseBetweenProcessGrab = 5;
 Game.PauseBetweenStarts = 0;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on Nightwatch Co-op.\n\n" +
   "Required files:\n" +
-  "- Bloodborne game files\n\n" +
+  "- Bloodborne game files\n" +
+  "- Nightwatch Co-op files\n\n" +
   "Instructions:\n" + 
   "The only required step is selecting the \"Nightwatch Co-op.exe\" executable.";
-Game.ForceProcessSearch = false;
 
 //#################### ProtoInput ####################
 
