@@ -35,8 +35,9 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
 
 ## How to install
 1. Download the latest `nightwatchHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
-2. Move the downloaded file to the NucleusCoop `handlers` folder
-3. Select `Nightwatch Co-op.exe` from NucleusCoop GUI
+2. Download [Nightwatch Co-op](https://github.com/vladtepes22/NightwatchCoop/releases), download and extract the zip asset in releases (example `NightwatchCoop-v0.X.X-beta.X-win64.zip`), not the `Nightwatch.Co-op.exe`!
+3. Move the downloaded file to the NucleusCoop `handlers` folder
+4. Select `Nightwatch Co-op.exe` from NucleusCoop GUI
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
@@ -58,8 +59,9 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
 
 ## How to install
 1. Download the latest `bbhostHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
-2. Move the downloaded file to the NucleusCoop `handlers` folder
-3. Select `bbhost.exe` from NucleusCoop GUI
+2. Download [bbhost](https://github.com/droogie/bbhost/releases) from its releases page
+3. Move the downloaded file to the NucleusCoop `handlers` folder
+4. Select `bbhost.exe` from NucleusCoop GUI
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
@@ -81,8 +83,9 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
 ## How to install
 1. Please use a clean folder for your Supermedo fork, do not reuse an existing installations, create a separate folder!
 2. Download and extract the latest `bbportHandler.zip` from [releases](https://github.com/framilano/BloodborneNucleusCoopHandler/releases)
-3. Move the downloaded files to the NucleusCoop `handlers` folder
-4. Select `Bloodborne.exe` from NucleusCoop GUI, 
+3. Download [bbport by supermedo](https://github.com/Supermedo/bloodborne_pc/releases), the latest working version offline is 1.7.8!
+4. Move the downloaded files to the NucleusCoop `handlers` folder
+5. Select `Bloodborne.exe` from NucleusCoop GUI, 
   <img width="140" height="81" alt="immagine" src="https://github.com/user-attachments/assets/9b8b3bcf-0b06-4903-8b63-5004036f2db5" />
 
 ## Handler Instructions
