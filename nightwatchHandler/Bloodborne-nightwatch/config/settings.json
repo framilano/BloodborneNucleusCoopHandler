@@ -85,6 +85,7 @@
   "party_name": "Placeholder",
   "party_mode": "host",
   "party_code": "",
-  "playtime.main": 79,
-  "party_password": "12345"
+  "playtime.main": 0,
+  "party_password": "12345",
+  "party_max": "3"
 }

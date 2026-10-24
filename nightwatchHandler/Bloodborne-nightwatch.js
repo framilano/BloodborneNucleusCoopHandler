@@ -67,8 +67,8 @@ Game.ExecutableName = "Nightwatch Co-op.exe"
 
 //#################### Extra ####################
 
-Game.PauseBetweenContextAndLaunch = 10;
-Game.PauseBetweenProcessGrab = 5;
+Game.PauseBetweenContextAndLaunch = 0;
+Game.PauseBetweenProcessGrab = 20;
 Game.PauseBetweenStarts = 0;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on Nightwatch Co-op.\n\n" +
@@ -170,6 +170,7 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
   var partyNameLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_name', Nucleus.SearchType.Contains); 
   var partyCodeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_code', Nucleus.SearchType.Contains); 
   var partyModeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_mode', Nucleus.SearchType.Contains); 
+  var partyMaxSizeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_max', Nucleus.SearchType.Contains); 
 
   Handler.Log("Bloodborne path: " + bloodborneFolderPath);
   Handler.Log("User path: " + instanceNightwatchUserFolderPath);
@@ -179,7 +180,8 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
     userDirLineNumber + '|  "user_dir": "' + instanceNightwatchUserFolderPath.replace(/\\/g, "\\\\") +'",',
     fpsModeLineNumber + '|  "fps_mode": "'+ framerateOption +'",',
     partyNameLineNumber + '|  "party_name": "' + Player.Nickname + '",',
-    partyModeLineNumber + '|  "party_mode": "host",'
+    partyModeLineNumber + '|  "party_mode": "host",',
+    partyMaxSizeLineNumber + '|  "party_max": "' + PlayerList.Count + '"'
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceNightwatchSettingsFilePath, dict);
