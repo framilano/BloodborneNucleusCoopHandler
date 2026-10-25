@@ -22,6 +22,7 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
 - [Linux](#linux)
 - [Todo](#todo)
 - [AI Disclaimer](#ai-disclaimer)
+- [Troubleshooting](#troubleshooting)
 - [Support](#support)
 
 # Nightwatch Co-op
@@ -111,6 +112,11 @@ I already released a [Linux Bloodborne handler for PartyDeck](https://github.com
 - [X] Support for [BBPort](https://github.com/Supermedo/bloodborne_pc)
 - [X] Support for [BBHost](https://github.com/droogie/bbhost)
 - [X] Support for other servers other than Wozzardman forks
+
+## Troubleshooting
+-  **Handler not appearing in Nucleus?** Check that you've copied correctly the Bloodborne-handler folder and the corresponding .js file with it in the NucleusApp/handlers folder
+-  **One instance is running at 60 fps and the other one barely at 30, what should I do?** This is a typical Nucleus issue, try pressing CTRL + h, it should fix the issue
+-  **A weird dialog called `Nucleus Process Picker` just opened after clicking Play on Nucleus, what is this?** This process picker helps Nucleus understand which process corresponds to your game instance, wait until the game window opens and click `Refresh` on Nucleus Process Picker, select `bb-probe.exe` and wait for the other instances to boot.
 
 ## AI Disclaimer
 This project is not being hosted on Nucleus Co-op because it has been falsely accused of being developed using AI, a less than 300 lines js script that I made for fun in a weekend. 
