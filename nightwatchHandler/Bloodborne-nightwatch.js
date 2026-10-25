@@ -67,7 +67,7 @@ Game.ExecutableName = "Nightwatch Co-op.exe"
 
 //#################### Extra ####################
 
-Game.PauseBetweenContextAndLaunch = 0;
+Game.PauseBetweenContextAndLaunch = 10;
 Game.PauseBetweenProcessGrab = 20;
 Game.PauseBetweenStarts = 0;
 Game.Description = 
@@ -143,7 +143,7 @@ Game.ProtoInput.UseOpenXinput = true;
 function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
   Handler.Log("[START setupNightwatchSettingsConfig]");
 
-  var handlerNightwatchSettingsFilePath = System.IO.Path.Combine(Game.Folder, "config\\settings.json");
+  var handlerNightwatchSettingsFilePath = System.IO.Path.Combine(Game.Folder, "settings.json");
   var instanceUserProfilePath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath);
   var instanceNightwatchSettingsFilePath = System.IO.Path.Combine(instanceUserProfilePath, "settings.json");
 
@@ -171,6 +171,7 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
   var partyCodeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_code', Nucleus.SearchType.Contains); 
   var partyModeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_mode', Nucleus.SearchType.Contains); 
   var partyMaxSizeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_max', Nucleus.SearchType.Contains); 
+  var partyJoinPasswordsSizeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_join_passwords', Nucleus.SearchType.Contains); 
 
   Handler.Log("Bloodborne path: " + bloodborneFolderPath);
   Handler.Log("User path: " + instanceNightwatchUserFolderPath);
@@ -181,7 +182,8 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
     fpsModeLineNumber + '|  "fps_mode": "'+ framerateOption +'",',
     partyNameLineNumber + '|  "party_name": "' + Player.Nickname + '",',
     partyModeLineNumber + '|  "party_mode": "host",',
-    partyMaxSizeLineNumber + '|  "party_max": "' + PlayerList.Count + '"'
+    partyMaxSizeLineNumber + '|  "party_max": "' + PlayerList.Count + '",',
+    partyJoinPasswordsSizeLineNumber + '|  "party_join_passwords": {"127.0.0.1:9307": "12345"}',
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceNightwatchSettingsFilePath, dict);
@@ -204,7 +206,7 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
 function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption) {
   Handler.Log("[START setupNightwatchIniConfig]");
 
-  var handlerNightwatchInitFilePath = System.IO.Path.Combine(Game.Folder, "config\\bbport.ini");
+  var handlerNightwatchInitFilePath = System.IO.Path.Combine(Game.Folder, "bbport.ini");
   var instanceNightwatchInitFilePath = System.IO.Path.Combine(instanceNightwatchContentFolderPath, "bbport.ini");
   
   //Replacing existing bbport.ini

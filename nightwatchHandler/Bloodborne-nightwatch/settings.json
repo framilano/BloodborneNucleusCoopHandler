@@ -87,5 +87,6 @@
   "party_code": "",
   "playtime.main": 0,
   "party_password": "12345",
-  "party_max": "3"
+  "party_max": "3",
+  "party_join_passwords": {"127.0.0.1:9307": "12345"}
 }
