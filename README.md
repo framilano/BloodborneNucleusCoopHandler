@@ -116,6 +116,7 @@ I already released a [Linux Bloodborne handler for PartyDeck](https://github.com
 - [X] Support for other servers other than Wozzardman forks
 
 ## Troubleshooting
+- **My DS4/5 controller controls two instances at the same time!** It's explained that DS4Windows causes in the [Nucleus FAQ](https://www.splitscreen.me/docs/faq/#20--my-playstationgeneric-pc-controller-isnt-being-detectedhas-double-input-how-do-i-fix-this). Installing [Hidhide](https://github.com/nefarius/HidHide) fixes it usually.
 -  **Handler not appearing in Nucleus?** Check that you've copied correctly the Bloodborne-handler folder and the corresponding .js file with it in the NucleusApp/handlers folder
 -  **One instance is running at 60 fps and the other one barely at 30, what should I do?** This is a typical Nucleus issue, try pressing CTRL + h, it should fix the issue
 -  **A weird dialog called `Nucleus Process Picker` just opened after clicking Play on Nucleus, what is this?** This process picker helps Nucleus understand which process corresponds to your game instance, wait until the game window opens and click `Refresh` on Nucleus Process Picker, select `bb-probe.exe` and wait for the other instances to boot.
