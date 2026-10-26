@@ -69,7 +69,9 @@ Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/Nightw
 
 ## Handler Instructions
 1. The handler will ask you to select your Bloodborne CUSAXXXXX folder and your `eboot-bin.decrypted`
-2. Done, edit the `bbhost.toml` options, login into your accounts and play!
+2. For the first time launching the handler, select `No` at the `skipLauncher` option, so you launch the setup windows and create accounts or login into the hunter's dream. After logging in, click `Save` on all your bbhost setup windows and close the handler. At the next boot select `Yes` as skipLauncher option and you should be good, the game will boot directly skipping the launcher and the online accounts will work just fine.
+3. Remember that in-game you can change graphics settings and other QoL stuff.
+4. Done!
 
 ## Extra
 - Enable the in-game music only on the first instance, so you won't have music echoing while playing
