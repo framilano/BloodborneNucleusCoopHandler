@@ -25,6 +25,13 @@ Game.AddOption("Desidered frame rate cap",
   framerateOptions
 );
 
+var skipLauncherOptions = ["Yes", "No"];
+Game.AddOption("Skip Launcher",
+  "Should we skip bbhost setup launcher?\n(Do not skip the launcher if you need to login into your Hunter's Dream account first!)", 
+  "skipLauncherOption", 
+  skipLauncherOptions
+);
+
 //#################### Game Info ####################
 
 Game.ExecutableName = "bbhost.exe";                      
@@ -175,5 +182,5 @@ Game.Play = function() {
   setupBbHostOptionsConfig(handlerBbhostFolderPath, resolutionOption, framerateOption);
   
   var instanceBbhostDataFolderPath = System.IO.Path.Combine(Context.EnvironmentPlayer, Context.UserProfileSavePath, "data");
-  Context.StartArguments = "--data \"" + instanceBbhostDataFolderPath + "\" --app0 \"" + bloodborneFolderPath + "\" --eboot \"" + decryptedEbootFilePath + "\"";
+  Context.StartArguments = skipLauncherOption == "No" ? "--setup " : " " + "--data \"" + instanceBbhostDataFolderPath + "\" --app0 \"" + bloodborneFolderPath + "\" --eboot \"" + decryptedEbootFilePath + "\"";
 };

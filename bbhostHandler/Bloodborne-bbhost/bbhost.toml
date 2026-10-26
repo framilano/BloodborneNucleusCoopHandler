@@ -16,8 +16,8 @@ check = true
 
 [startup]
 # Skip the three company logos and the Exit Game warning (Bloodborne 1.09 only).
-skip_intro = true
-setup_window = false
+skip_intro = false
+setup_window = true
 
 [bbhost]
 config_version = 4

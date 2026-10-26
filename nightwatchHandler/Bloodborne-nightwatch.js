@@ -51,7 +51,9 @@ Game.MaxPlayers = 4;
 
 //#################### File System ####################
 
-Game.HardlinkGame = true;
+Game.SymlinkGame = true;
+Game.DirExclusions = ["user"];
+Game.FileSymlinkExclusions = ["bbport.ini"];
 
 //#################### Nucleus Co-op Environment ####################
 
