@@ -10,11 +10,18 @@ Hub.Maintainer.Id = "va6S2wcYCxth3FSgZ";
 Game.AddOption("Bloodborne Folder Path", "Enter Bloodborne folder path (the CUSAXXXXX folder containing eboot.bin)", "bloodborneFolderPath", []);
 
 //Ask for the render resolution used by all instances
-var resolutionOptions = ["1280x720 (16:9)", "1920x1080 (16:9)", "2560x1440 (16:9)", "3840x2160 (16:9)", "2560x1080 (21:9)", "3440x1440 (21:9)", "3840x1600 (21:9)", "5120x2160 (21:9)", "3840x1080 (32:9)", "5120x1440 (32:9)"];
+var resolutionOptions = ["Custom", "1280x720 (16:9)", "1920x1080 (16:9)", "2560x1440 (16:9)", "3840x2160 (16:9)", "2560x1080 (21:9)", "3440x1440 (21:9)", "3840x1600 (21:9)", "5120x2160 (21:9)", "3840x1080 (32:9)", "5120x1440 (32:9)", "960x1080 (8:9)", "1280x1440 (8:9)", "1920x2160 (8:9)"];
 Game.AddOption("Render Resolution", 
   "Enter your desired render resolution for all instances", 
   "resolutionOption", 
   resolutionOptions
+);
+
+//Ask for custom resolution
+Game.AddOption("Custom Resolution", 
+  "Enter your desired Custom resolution\n(Useful if you don't want to use the previous presets, examples: 480x1080, 640x480)", 
+  "customResolutionOption", 
+  []
 );
 
 //Ask for the frame rate cap used by all instances
@@ -52,8 +59,10 @@ Game.MaxPlayers = 4;
 //#################### File System ####################
 
 Game.SymlinkGame = true;
-Game.DirExclusions = ["user"];
-Game.FileSymlinkExclusions = ["bbport.ini"];
+Game.DirExclusions = ["user"]; //Do not symlink or hardlink these folders
+Game.FileSymlinkExclusions = ["bbport.ini"]; //Do not copy these files
+Game.DirSymlinkCopyInsteadIncludeSubFolders = true;
+Game.DirSymlinkCopyInstead = [ "engine\\out", "engine-assets" ];
 
 //#################### Nucleus Co-op Environment ####################
 
@@ -70,7 +79,7 @@ Game.ExecutableName = "Nightwatch Co-op.exe"
 //#################### Extra ####################
 
 Game.PauseBetweenContextAndLaunch = 10;
-Game.PauseBetweenProcessGrab = 20;
+Game.PauseBetweenProcessGrab = 10;
 Game.PauseBetweenStarts = 0;
 Game.Description = 
   "Bloodborne Splitscreen Co-op based on Nightwatch Co-op.\n\n" +
@@ -205,7 +214,7 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
 /**
  * Editing content instance bbport.ini
  */
-function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption) {
+function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption, customResolutionOption) {
   Handler.Log("[START setupNightwatchIniConfig]");
 
   var handlerNightwatchInitFilePath = System.IO.Path.Combine(Game.Folder, "bbport.ini");
@@ -222,7 +231,7 @@ function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutio
   var dict = [ 
     upscalingLineNumber + '|upscaler=' + upscalingOption,
     upscalingPresetLineNumber + '|preset=' + upscalingPresetOption,
-    resolutionLineNumber + '|output_res=' + resolutionOption,
+    resolutionLineNumber + '|output_res=' + (resolutionOption == "Custom" ? customResolutionOption : resolutionOption),
     skipIntroLineNumber + '|skip_intro=1',
   ]; 
 
@@ -238,6 +247,7 @@ Game.Play = function() {
   var framerateOption = Context.Options["framerateOption"];
   var upscalingOption = Context.Options["upscalingOption"].split(" ")[0];
   var upscalingPresetOption = Context.Options["upscalingPresetOption"].split(" ")[0];
+  var customResolutionOption = Context.Options["customResolutionOption"].trim();
 
   //Setting up settings.json first
   setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption);
@@ -245,7 +255,7 @@ Game.Play = function() {
   var instanceNightwatchContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
 
   //Setting up bbport.ini
-  setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption);
+  setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption, customResolutionOption);
   
   Context.StartArguments = "--play";
   Game.ExecutableName = System.IO.Path.Combine(instanceNightwatchContentFolderPath, "engine", "out", "bb-probe.exe");
