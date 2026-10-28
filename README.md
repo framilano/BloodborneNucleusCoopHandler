@@ -2,6 +2,7 @@
 Bloodborne handlers for [Nightwatch Co-op](https://github.com/vladtepes22/NightwatchCoop), [bbhost](https://github.com/droogie/bbhost) and [bbport](https://github.com/Supermedo/bloodborne_pc). 
 
 <img width="2268" height="638" alt="Screenshot 2026-09-21 213939" src="https://github.com/user-attachments/assets/4dccd5dd-abc8-42d6-8673-3605592cd34d" />
+<img width="2559" height="1439" alt="image" src="https://github.com/user-attachments/assets/2ca3a192-c792-4eab-b17f-a91310c267f9" />
 
 ## Table of contents
 - [Nightwatch Co-op](#nightwatch-co-op)
