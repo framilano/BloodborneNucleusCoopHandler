@@ -67,7 +67,7 @@ Game.DirSymlinkCopyInstead = [ "engine\\out", "engine-assets" ];
 //#################### Nucleus Co-op Environment ####################
 
 Game.UseNucleusEnvironment = true;
-Game.UserProfileSavePath = "AppData\\Roaming\\bloodborne-seamless";
+Game.UserProfileSavePath = "AppData\\Roaming\\nightwatch";
 
 //#################### Focus ####################
 
@@ -227,12 +227,14 @@ function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutio
   var upscalingPresetLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'preset', Nucleus.SearchType.Contains); 
   var resolutionLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'output_res', Nucleus.SearchType.Contains); 
   var skipIntroLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'skip_intro', Nucleus.SearchType.Contains); 
+  var partySplitscreenLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'party_splitscreen', Nucleus.SearchType.Contains); 
 
   var dict = [ 
     upscalingLineNumber + '|upscaler=' + upscalingOption,
     upscalingPresetLineNumber + '|preset=' + upscalingPresetOption,
     resolutionLineNumber + '|output_res=' + (resolutionOption == "Custom" ? customResolutionOption : resolutionOption),
     skipIntroLineNumber + '|skip_intro=1',
+    partySplitscreenLineNumber + '|party_splitscreen=1',
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceNightwatchInitFilePath, dict);
