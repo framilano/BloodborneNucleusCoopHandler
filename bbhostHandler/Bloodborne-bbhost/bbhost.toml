@@ -1,23 +1,129 @@
-
+# bbhost configuration. Set the two paths under [paths], then run bbhost.
+# On Windows write them either way: "C:\Games\Bloodborne" or "C:/Games/Bloodborne".
+# A relative path is taken from the folder this file is in.
+# This file is the per-user one (%APPDATA%\bbhost on Windows, ~/.config/bbhost on
+# Linux): every copy of bbhost reads it, so a new download or an update keeps it.
 [paths]
+# The folder that contains dvdroot_ps4 (the decrypted game dump). An update
+# kept beside it in a folder of its own (CUSA00900-UPDATE or CUSA00900-patch,
+# as shadPS4 keeps one) is read in place of the game folder's files.
+#   app0 = "C:\Games\Bloodborne\CUSA00900"
 app0 = ""
+# The decrypted eboot ELF. May also be given on the command line.
+#   eboot = "C:\Games\Bloodborne\eboot.bin"
 eboot = ""
+# Writable folder for saves, caches and /data. Default: the per-user data
+# folder (%LOCALAPPDATA%\bbhost\data, ~/.local/share/bbhost/data), which
+# outlives any copy of bbhost.
+# data = "D:/bbhost-data"
+# The PC port's asset overlay: files here resolve ahead of the dump, so a
+# modified asset never has to be written into it. Default: <data>/mods.
+# Ignored when the directory does not exist.
+# mods = "./data/mods"
 data = ""
 
 [online]
+# Hostname that replaces the official *.scej-network.jp servers.
 host = "thehuntersdream.com"
+# Force this scheme for those hosts. The live server takes only https; a
+# server on your own network may speak plain http.
 scheme = "https"
+# Check the server's certificate.
 verify_tls = true
+online_id = "Hunter"
+# true: the game is signed out until this PC is signed in on the F10
+# screen (Account section), and the account's name is the online id.
+# The live server plays only with signed-in players.
 require_account = true
+# Where the account calls (/auth/device/..., /auth/account/create) go. Tokens
+# and recovery codes travel here, so in production this is the server's https
+# origin; without it they go to np_server, fine on a LAN.
 auth_server = "https://thehuntersdream.com"
+# The host's own calls (rooms, events) go to this API base. Default:
+# <scheme>://<host>:18671, the same server as the game's own traffic.
+# np_server = "http://127.0.0.1:18671"
+# The address and UDP port other players reach this host at (P2P). Two
+# instances on one machine need different ports.
+# p2p_addr = "127.0.0.1"
+p2p_port = 9307
+# The STUN server the P2P port asks for the address the world sees it at
+# (players behind NAT). Default: the private server's host on 3478;
+# "off" never asks.
+# stun_server = "thehuntersdream.com:3478"
+
+[player]
+# The character's name the name box starts from (the first key typed
+# replaces it). Default: online_id.
+name = "Hunter"
+# type: the game's text boxes - the character's name, a chalice glyph,
+# the network password - are typed in a box over the game (Enter
+# accepts, Escape cancels). auto: the name is `name` at once.
+ime = "type"
+
+[video]
+width = 1920
+height = 1080
+fps_cap = 30
+# The rate the flip clock runs at. 0 (default) follows the display the
+# window is on; set a number only when the display reports the wrong one.
+# vblank_hz = 0
+# true: no window, no presentation (smoke tests)
+headless = false
+
+# Key bindings. The in-game System > Key Bindings screen changes these
+# and saves them in bbhost-options.toml, which wins over this file; what
+# is here are the defaults for a player who never opens it. Each action
+# has a key and a mouse button, either optional: "E", "Mouse2",
+# "X, Mouse2", or "none". Keys are SDL key names ("W", "Space",
+# "Left Shift", "F1"); Mouse1..Mouse5 are the left, right and middle
+# buttons and the two side buttons, which act while the mouse turns
+# the camera. The shape is Dark Souls III's on Bloodborne's buttons:
+# R1 attacks, R2 is the strong attack, L1 transforms, L2 is the firearm
+# and the parry, Circle dodges, Triangle drinks a Blood Vial, Square
+# uses the quick item, Cross interacts, the d-pad switches weapons and
+# items. The arrows, Enter, Backspace and Escape work every menu
+# whatever is bound to them.
+# [keys]
+# move_forward = "W"
+# move_back = "S"
+# move_left = "A"
+# move_right = "D"
+# roll = "Space"
+# lock_on = "Q"
+# l3 = "Left Ctrl"
+# attack = "Mouse1"
+# strong_attack = "V"
+# strong_modifier = "Left Shift"   # held with attack: the strong one
+# transform = "C, Mouse3"
+# firearm = "X, Mouse2"
+# blood_vial = "R"
+# use_item = "F"
+# interact = "E"
+# switch_item = "Down"
+# switch_right = "Right"
+# switch_left = "Left"
+# dpad_up = "Up"
+# gestures = "G"                   # the touchpad's left side
+# personal_effects = "T"           # and its right
+# look_up = "I"
+# look_down = "K"
+# look_left = "J"
+# look_right = "L"
+# menu = "Escape"
+# confirm = "Return"               # menus: OK, the same bit as `roll`
+# back = "Backspace"               # menus: Return, the same bit as `interact`
+
+[startup]
+# Skip the three company logos and the Exit Game warning (Bloodborne 1.09 only).
+skip_intro = true
+setup_window = true
+setup_animations = false
 
 [update]
 check = true
 
-[startup]
-# Skip the three company logos and the Exit Game warning (Bloodborne 1.09 only).
-skip_intro = false
-setup_window = true
+[debug]
+tooling = true
 
 [bbhost]
-config_version = 4
+config_version = 5
