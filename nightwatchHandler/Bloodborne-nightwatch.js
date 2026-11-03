@@ -61,7 +61,7 @@ Game.SymlinkGame = true;
 Game.DirExclusions = ["user"]; //Do not symlink or hardlink these folders
 Game.FileSymlinkExclusions = ["bbport.ini"]; //Do not copy these files
 Game.DirSymlinkCopyInsteadIncludeSubFolders = true;
-Game.DirSymlinkCopyInstead = [ "engine\\out", "engine-assets" ];
+Game.DirSymlinkCopyInstead = [ "engine\\out", "engine-assets", "mods" ];
 
 //#################### Nucleus Co-op Environment ####################
 
