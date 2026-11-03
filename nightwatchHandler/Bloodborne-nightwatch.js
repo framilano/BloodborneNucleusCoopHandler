@@ -48,6 +48,14 @@ Game.AddOption("Desidered Upscaling Preset",
   upscalingPresetOptions
 );
 
+//Ask for the upscaling option used by all instances
+var modelLodOptions = ["-2 - Highest details", "0 - Original PS4 details", "1 - Lowest details"];
+Game.AddOption("Desidered Model Details", 
+  "Enter your details level for modsl", 
+  "modelLodOption", 
+  modelLodOptions
+);
+
 //#################### Game Info ####################
 
 Game.GUID = "Bloodborne-nightwatch";
@@ -58,10 +66,10 @@ Game.MaxPlayers = 4;
 //#################### File System ####################
 
 Game.SymlinkGame = true;
-Game.DirExclusions = ["user"]; //Do not symlink or hardlink these folders
+Game.DirExclusions = ["user", "mods"]; //Do not symlink or hardlink these folders
 Game.FileSymlinkExclusions = ["bbport.ini"]; //Do not copy these files
 Game.DirSymlinkCopyInsteadIncludeSubFolders = true;
-Game.DirSymlinkCopyInstead = [ "engine\\out", "engine-assets", "mods" ];
+Game.DirSymlinkCopyInstead = [ "engine\\out", "engine-assets" ];
 
 //#################### Nucleus Co-op Environment ####################
 
@@ -176,6 +184,7 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
 
   var gameDirLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'game_dir', Nucleus.SearchType.Contains); 
   var userDirLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'user_dir', Nucleus.SearchType.Contains); 
+  var modsDirLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'mods_dir', Nucleus.SearchType.Contains); 
   var fpsModeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'fps_mode', Nucleus.SearchType.Contains); 
   var partyNameLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_name', Nucleus.SearchType.Contains); 
   var partyCodeLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchSettingsFilePath, 'party_code', Nucleus.SearchType.Contains); 
@@ -186,9 +195,12 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
   Handler.Log("Bloodborne path: " + bloodborneFolderPath);
   Handler.Log("User path: " + instanceNightwatchUserFolderPath);
 
+  var modsFolder = System.IO.Path.Combine(Context.RootInstallFolder, "mods");
+
   var dict = [ 
     gameDirLineNumber + '|  "game_dir": "' + bloodborneFolderPath.replace(/\\/g, "\\\\") + '",',
     userDirLineNumber + '|  "user_dir": "' + instanceNightwatchUserFolderPath.replace(/\\/g, "\\\\") +'",',
+    modsDirLineNumber + '|  "mods_dir":"' + modsFolder.replace(/\\/g, "\\\\") +'",',
     fpsModeLineNumber + '|  "fps_mode": "'+ framerateOption +'",',
     partyNameLineNumber + '|  "party_name": "' + Player.Nickname + '",',
     partyModeLineNumber + '|  "party_mode": "host",',
@@ -213,7 +225,7 @@ function setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption) {
 /**
  * Editing content instance bbport.ini
  */
-function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption, customResolutionOption) {
+function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption, customResolutionOption, modelLodOption) {
   Handler.Log("[START setupNightwatchIniConfig]");
 
   var handlerNightwatchInitFilePath = System.IO.Path.Combine(Game.Folder, "bbport.ini");
@@ -227,6 +239,7 @@ function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutio
   var resolutionLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'output_res', Nucleus.SearchType.Contains); 
   var skipIntroLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'skip_intro', Nucleus.SearchType.Contains); 
   var partySplitscreenLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'party_splitscreen', Nucleus.SearchType.Contains); 
+  var modelLodLineNumber = Context.FindLineNumberInTextFile(instanceNightwatchInitFilePath, 'model_lod', Nucleus.SearchType.Contains); 
 
   var dict = [ 
     upscalingLineNumber + '|upscaler=' + upscalingOption,
@@ -234,6 +247,7 @@ function setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutio
     resolutionLineNumber + '|output_res=' + (resolutionOption == "Custom" ? customResolutionOption : resolutionOption),
     skipIntroLineNumber + '|skip_intro=1',
     partySplitscreenLineNumber + '|party_splitscreen=1',
+    modelLodLineNumber + '|model_lod=' + modelLodOption
   ]; 
 
   Context.ReplaceLinesInTextFile(instanceNightwatchInitFilePath, dict);
@@ -249,6 +263,7 @@ Game.Play = function() {
   var upscalingOption = Context.Options["upscalingOption"].split(" ")[0];
   var upscalingPresetOption = Context.Options["upscalingPresetOption"].split(" ")[0];
   var customResolutionOption = Context.Options["customResolutionOption"].trim();
+  var modelLodOption = Context.Options["modelLodOption"].split(" ")[0];
 
   //Setting up settings.json first
   setupNightwatchSettingsConfig(bloodborneFolderPath, framerateOption);
@@ -256,7 +271,7 @@ Game.Play = function() {
   var instanceNightwatchContentFolderPath = Context.GetFolder(Nucleus.Folder.InstancedGameFolder);
 
   //Setting up bbport.ini
-  setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption, customResolutionOption);
+  setupNightwatchIniConfig(instanceNightwatchContentFolderPath, resolutionOption, upscalingOption, upscalingPresetOption, customResolutionOption, modelLodOption);
   
   Context.StartArguments = "--play";
   Game.ExecutableName = System.IO.Path.Combine(instanceNightwatchContentFolderPath, "engine", "out", "bb-probe.exe");

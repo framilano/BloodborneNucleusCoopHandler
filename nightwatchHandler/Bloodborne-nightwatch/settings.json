@@ -1,6 +1,6 @@
 {
   "ui_language": "en",
-  "game_dir": "C:\\Users\\Francesco\\Games\\EmulationLibrary\\ROMs\\ps4\\CUSA03173",
+  "game_dir": "",
   "user_dir": "",
   "dlc_dir": "",
   "player_profile": "",
@@ -11,7 +11,7 @@
   "language": "1",
   "fullscreen": false,
   "display_device": "",
-  "present_mode": "Mailbox",
+  "present_mode": "Immediate",
   "fps_mode": "60",
   "draw_pipe": "",
   "readbacks": "",
